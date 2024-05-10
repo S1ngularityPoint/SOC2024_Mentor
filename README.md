@@ -4,6 +4,12 @@ Here is the tentative schedule:
 
 ## Week 0 : Setting up
 - This week will be spent in setting up your coding environment. We recommend WSL as you can code in C/C++ without any hassle once you set up WSL.
+- Install wsl : https://learn.microsoft.com/en-us/windows/wsl/install
+- Use ubuntu preferrably although pretty much any distribution should be okay (so if you do not have ubuntu don't panic and change your distribution lol you will probably be fine)
+- In case you want to try using the manual install (as the default one may not work for everyone), follow this : https://learn.microsoft.com/en-us/windows/wsl/install-manual
+- Integrate WSL with visual studio code : https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-vscode
+- Install git : https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-git
+- Run the following command to install g++, gdb (optional but recommended), make : sudo apt update && sudo apt install g++ gdb make ninja-build rsync zip
 - Here are some practice questions. 
 ## Week 1 : This is the Way
 - Familiarise yourself with the threading library threads of C++.
