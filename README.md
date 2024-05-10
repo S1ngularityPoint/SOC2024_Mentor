@@ -9,9 +9,12 @@ Here is the tentative schedule:
 - Familiarise yourself with the threading library threads of C++.
 - Understand the concepts of mutual exclusions, race conditions and why locking is necessary (yes it is totally not from a core course of a certain department).
 - Use locks and conditional variables in programs yourself and understand why they are necessary.
+- Also minimize usage of locks to prioritize speed (not the drug).
 ## Weeks 2-3 One Instruction to Compute Them all 
-- Great you have reached till here!(Will be filled by Hari) SIMD
-
+- Vectorization as provided by the CPU
+- Understand the special registers and the powerful instructions available for our use
+- Automatic parallelization and the use of pragma
+- Manual parallelization for more power 
 ## Weeks 4-5 This is where the fun begins
 - Introduction to openCL.
 ## Week 6
