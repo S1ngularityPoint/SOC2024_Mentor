@@ -9,8 +9,14 @@ Here is the tentative schedule:
 - In case you want to try using the manual install (as the default one may not work for everyone), follow this : https://learn.microsoft.com/en-us/windows/wsl/install-manual
 - Integrate WSL with visual studio code : https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-vscode
 - Install git : https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-git
-- Run the following command to install g++, gdb (optional but recommended), make : sudo apt update && sudo apt install g++ gdb make ninja-build rsync zip
-- Here are some practice questions. 
+- Run the following command to install g++, gdb (optional but recommended), make : sudo apt update && upgrade &&sudo apt install g++ gdb make ninja-build rsync zip
+- Run the following command to install python (we might need this for plotting performance) : sudo apt install python3 python3-pip ipython3 
+- Here are some practice questions to check your installation.
+- Check g++ installation by completing the task described in compile.cpp 
+- Complete the tasks in naive.cpp (implement naive Schur/Element-Wise Product of two vectors)
+- Run the command 'make' on the terminal to check Makefile installation
+- Run the command 'python3 grapher.py' to check python installation
+- You might need to install some python modules like matplotlib or numpy in which case run pip install {nameOfModule}
 ## Week 1 : This is the Way
 - Familiarise yourself with the threading library threads of C++.
 - Understand the concepts of mutual exclusions, race conditions and why locking is necessary (yes it is totally not from a core course of a certain department).
