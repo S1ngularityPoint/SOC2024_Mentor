@@ -17,5 +17,7 @@ class Matrix {
         void initialiseMatrix();
         void inputMatrix();
         void displayMatrix();
+        int** T();
         Matrix* multiplyMatrix(Matrix* N);
+
 };
