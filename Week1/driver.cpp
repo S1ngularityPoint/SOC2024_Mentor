@@ -10,7 +10,11 @@ int main(int argc, char **argv) {
     Matrix* B = new Matrix(m,p);
     A->inputMatrix();
     B->inputMatrix();
+    auto start = chrono::high_resolution_clock::now();
     Matrix* C = A->multiplyMatrix(B);
+    auto end = chrono::high_resolution_clock::now();
+    auto elapsed = chrono::duration_cast<chrono::duration<double>>(end - start);
+    cout << "Time taken : " << elapsed.count() << "\n";
     C->displayMatrix();
     A->~Matrix();
     B->~Matrix();
