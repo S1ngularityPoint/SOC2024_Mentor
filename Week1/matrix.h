@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <immintrin.h> // SIMD
 #include <cstring>
+#include <mutex>
+#include <condition_variable>
 
 class Matrix {
     private:
@@ -19,5 +21,10 @@ class Matrix {
         void displayMatrix();
         int** T();
         Matrix* multiplyMatrix(Matrix* N);
+
+        // helper function
+        void set (int i, int j, int num) {
+            M[i][j] = num;
+        }
 
 };

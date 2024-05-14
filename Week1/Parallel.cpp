@@ -1,5 +1,6 @@
 #include "matrix.h"
 #define Loop(i,a,b) for (int i = a ; i < b ; i++)
+#define MAX_THREADS 8
 using namespace std;
 
 Matrix::Matrix(int a, int b) { // generate a matrix (2D array) of dimensions a,b
@@ -44,28 +45,26 @@ int** Matrix::T(){
     return MT;
 }
 
-void dot(int* A, int* B, int n, int* r){
-    Loop(i,0,n){
-        *r += A[i]*B[i];
-        // cout << i << " " << A[i]*B[i] << endl;
-    } 
-    // cout << "This is r " << *r << endl;
+Matrix* Matrix::multiplyMatrix(Matrix* N) {
+    if (this->m != N->n) {
+        return NULL;
+    }
+    Matrix *c = new Matrix(this->n,N->m);
+
+    /*
+    
+    BEGIN STUDENT CODE
+    INPUT : this : pointer to matrix A
+            N    : pointer to matrix B
+
+    OUTPUT : C   : pointer to matrix C = A*B
+
+    matrix multiplication is defined as following:
+    if input matrix A is a matrix of dimensions n1 by n2 and B is a matrix of dimension n2 by n3 then matrix product C = A*B is defined as
+    C[i][j] = sum over k = 0 to n2-1 {A[i][k]*B[k][j]}
+
+    */
+
+    return c;
 }
 
-Matrix* Matrix::multiplyMatrix(Matrix* N) {
-    // cout << "Hello there" << endl; 
-    int** NT = N->T();
-    Matrix* P = new Matrix(this->n,N->m);
-    thread* t = new thread[P->n*P->m];
-    // cout << "hmm" << endl;
-    Loop(i,0,P->n*P->m){
-        int a = i/(P->n), b = i%(P->n);
-        // cout << i << " hmm " << endl;
-        t[i] = thread(dot,this->M[a],NT[b],this->m,&P->M[a][b]);
-    }
-    Loop(i,0,P->n*P->m) t[i].join();
-    delete [] t;
-    Loop(i,0,N->m) delete [] NT[i];
-    delete [] NT;
-    return P;
-}
