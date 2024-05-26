@@ -21,4 +21,4 @@ class vec {
     }
 };
 
-vec kroneckerProduct (vec v1, vec v2);
+vec schurProduct (vec v1, vec v2);
