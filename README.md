@@ -1,5 +1,5 @@
 # One-Program-To-Outspeed-Them-All
-Welcome to our SOC "One Program To Outspeed Them All". Join us as we dwelve deep into the concepts of threads, SIMD (Single Instruction/ Multiple Data), the openCL library and ultimately a fun project to end at a high note :)
+Welcome to our SOC "One Program To Outspeed Them All". Join us as we program keeping performance first and foremost!
 Here is the tentative schedule:
 
 ## Week 0 : Setting up
