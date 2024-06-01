@@ -22,12 +22,10 @@ int main () {
     float vec1[n];
     float vec2[n];
     for (int i=0; i<n; i++) {
-        // cin>>vec1[i];
-        vec1[i] = i;
+        cin>>vec1[i];
     }
     for (int i=0; i<n; i++) {
-        // cin>>vec2[i];
-        vec2[i] = i;
+        cin>>vec2[i];
     }
     float naiveTimeTaken = 0;
     float SIMDTimeTaken = 0;
@@ -51,7 +49,7 @@ int main () {
         dotProduct = 0;
         auto start2 = chrono::high_resolution_clock::now();
         //STUDENT CODE BEGINS HERE
-        cout<<"STUDENT CODE NOT IMPLEMENTED!";
+        cout<<"STUDENT CODE NOT IMPLEMENTED!\n";
         exit(-1);
         //END OF STUDENT CODE
         auto end2 = chrono::high_resolution_clock::now();
