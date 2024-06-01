@@ -32,7 +32,7 @@ int32_t b[2] = {14,20}; // b[0] = 14, b[1] = 20
 int32_t c[2]; // declare c
 c[0] = a[0] + b[0]; // c[0] = a[0] + b[0] = 26
 c[1] = a[1] + b[1]; // c[1] = a[1] + b[1] = 36
-
+cout<<c[0]<<" "<<c[1]<<endl;
 /*
 
 Well lets try and understand how a computer goes through and does this, for this we need to go one level lower into the generated assembly
@@ -77,7 +77,7 @@ int64_t B = 0x000000140000000E; // vector representation of b
 int64_t C = A + B; // C vector = A vector + B vector
 int32_t cOne = C>>32; //c[1] = the upper 32 bits of C vector
 int32_t cZero = C^(0xFFFFFFFF00000000); // c[0] = the lower 32 bits of C vector
-
+cout<<cZero<<" "<<cOne<<endl;
 /*
 
 Thats very weird looking isn't it?
@@ -121,7 +121,7 @@ int32_t bThirtyTwo = 0x0014000E;
 int32_t cThirtyTwo = aThirtyTwo + bThirtyTwo;
 int16_t cSixteenZero = cThirtyTwo ^ (0xFFFF0000);
 int16_t cSixteenOne = cThirtyTwo>>16;
-
+cout<<cSixteenZero<<" "<<cSixteenOne<<endl;
 /*
 
 The generated asm is one instruction shorter than our original asm, and looks like : 
@@ -165,7 +165,7 @@ int32_t y[2] = {155,201};
 int32_t z[2];
 z[0] = x[0] + y[0];
 z[1] = x[1] + y[1];
-
+cout<<z[0]<<" "<<z[1]<<endl;
 /*
 
 TASK:
@@ -173,4 +173,7 @@ MAKE A VECTORIZED IMPLEMENTATION OF ABOVE CODE
 
 */
 
+//student code begin
+cout<<"Task not completed!\n";
+//student code end
 }
