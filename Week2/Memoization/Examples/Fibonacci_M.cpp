@@ -33,4 +33,6 @@ int main(){
     auto elapsed = chrono::duration_cast<std::chrono::duration<double>>(end - start);
     cout << "Time spent " << elapsed.count() << "\n";
     cout << "Number of recurive calls " << count << "\n";
+    delete [] dp;
+    return 0;
 }

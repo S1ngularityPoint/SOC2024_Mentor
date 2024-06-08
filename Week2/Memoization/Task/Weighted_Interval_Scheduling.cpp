@@ -8,7 +8,8 @@ typedef long long int ll;
 using namespace std;
 
 /*
-    * After seeing the exercises most of you must have thought what is so hard in coming up with 
+    * INTRO:
+    * Now we will deal with a slightly trickier problem
 */
 int main(){
 

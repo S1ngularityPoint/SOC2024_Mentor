@@ -22,6 +22,7 @@ int main(){
     ll f = fibonacci_R(n);
     auto end = chrono::high_resolution_clock::now();
     auto elapsed = chrono::duration_cast<std::chrono::duration<double>>(end - start);
-    cout <<"Time spent " << elapsed.count() << "\n";
+    cout << "Time spent " << elapsed.count() << "\n";
     cout << "Number of recurive calls " << count << "\n";
+    return 0;
 }

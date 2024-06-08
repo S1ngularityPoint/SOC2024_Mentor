@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <chrono>
 
 #define Loop(i,a,b) for (int i = a ; i < b ; i++)
 #define MOD 1000000007
@@ -7,7 +8,6 @@
 typedef long long int ll;
 
 using namespace std;
-
 /*
     * INTRO :
     * After seeing the Fibonacci example most of you must have thought it is quite easy to come up with a way to minimise
@@ -42,12 +42,39 @@ using namespace std;
     Output:
         8
     * From CSES/Dynamic_Programming/Coin_Combinations_1
+    * This file has a memoized recursive solution and is significantly faster than the non-memoized recursive solution
 */
-
-void solution(){
-
+ll Count = 0;
+ll* dp;
+ll solution(ll* coins, int n, ll sum){
+    Count++;
+    if (sum == 0) return 1;
+    ll N = 0;
+    Loop(i,0,n){
+        if (sum - coins[i] < 0) break;
+        if (dp[sum - coins[i]] != 0) N = (N + dp[sum - coins[i]])%MOD;
+        else N = (N + solution(coins,n,sum - coins[i]))%MOD;
+    }
+    dp[sum] = N;
+    return N;
 }
 
 int main(){
-
+    int n;
+    ll x;
+    cin >> n >> x;
+    ll* coins = new ll[n];
+    dp = new ll[x + 1];
+    Loop(i,0,n) cin >> coins[i];
+    sort(coins,coins + n);
+    auto start = chrono::high_resolution_clock::now();
+    ll N = solution(coins,n,x);
+    auto end = chrono::high_resolution_clock::now();
+    cout << N << "\n";
+    auto elapsed = chrono::duration_cast<chrono::duration<double>>(end - start);
+    cout << "Time spent " << elapsed.count() << "\n";
+    cout << "Number of recursive calls " << Count << "\n";
+    delete [] dp;
+    delete [] coins;
+    return 0;
 }
