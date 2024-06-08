@@ -43,7 +43,7 @@ int main () {
         naiveTimeTaken += (elapsed.count())/1000;
     }
 
-    cout<<dotProduct<<" "<<naiveTimeTaken<<endl;
+    cout<<dotProduct<<" "<<naiveTimeTaken<<" ";
     
     for (int i=0; i<1000; i++) {
         dotProduct = 0;
@@ -56,5 +56,5 @@ int main () {
         auto elapsed2 = chrono::duration_cast<chrono::duration<double>>(end2 - start2);
         SIMDTimeTaken += (elapsed2.count())/1000;
     }
-    cout<<dotProduct<<" "<<SIMDTimeTaken<<endl;
+    cout<<dotProduct<<" "<<SIMDTimeTaken<<" ";
 }
