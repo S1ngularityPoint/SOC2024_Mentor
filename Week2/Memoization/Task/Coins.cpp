@@ -61,7 +61,9 @@ ll solution_R(ll* coins, int n, ll sum){
 ll solution_M(ll* coins, int n, ll sum){
     Count_M++; // Do not remove this line
     ll N = 0;
-
+    // STUDENT CODE BEGINS HERE
+    cout<<"MEMOIZATION NOT IMPLEMENTED\n";
+    exit(1);
     return N;
 }
 int main(int argc, char* argv[]){
