@@ -1,8 +1,6 @@
 CC=g++
 CFLAGS=-Wall
 
-all: R M Test
-
 R: Coins.cpp
 	$(CC) $(CFLAGS) Coins.cpp -o Coins_R
 	./Coins_R 1
@@ -11,11 +9,11 @@ M: Coins.cpp
 	$(CC) $(CFLAGS) Coins.cpp -o Coins_M
 	./Coins_M 2
 
-Joint: Coins.cpp
+Joint_Coins: Coins.cpp
 	$(CC) $(CFLAGS) Coins.cpp -o Coins
 	./Coins 3 
 
-Test: Coins.cpp
+Test_Coins: Coins.cpp
 	$(CC) $(CFLAGS) Coins.cpp -o Coins
 	i=1; \
 	while [ $$i -le 8 ]; do \
@@ -24,5 +22,13 @@ Test: Coins.cpp
 		i=$$((i + 1)); \
 	done;
 
+Test_Subset: Subset_Sum.cpp
+	$(CC) $(CFLAGS) Subset_Sum.cpp -o Subset_Sum
+	i=1; \
+	while [ $$i -le 8 ]; do \
+		echo $$i; \
+		timeout 5 ./Subset_Sum < tests_subsets/$$i.in; \
+		i=$$((i + 1)); \
+	done;
 clean:
-	rm Coins Coins_M Coins_R
+	rm Coins Coins_M Coins_R Subset_Sum
