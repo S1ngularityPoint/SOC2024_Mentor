@@ -120,7 +120,7 @@ for (int t=0; t<2; t++) {
     }
     //worst possible
     start = chrono::high_resolution_clock::now();
-    //STUDENT CODE BEGINS HERE
+    // IMPLEMENTED FOR YOU - WORST POSSIBLE
     for (int k=0; k<width; k++) {
         for (int j=0; j<width; j++) {
             for (int i=0; i<width; i++) {
@@ -128,7 +128,6 @@ for (int t=0; t<2; t++) {
             }
         }
     }
-    //STUDENT CODE ENDS
     end = chrono::high_resolution_clock::now();
     elapsed = chrono::duration_cast<chrono::duration<double>>(end - start);
     worstPossibleTime += elapsed.count();    

@@ -28,6 +28,11 @@ ll Count = 0;
 // Declare some variable here for memoization
 ll solution(ll* A, ll n, ll index){
     Count++; // Do not remove this line
+
+    //STUDENT CODE BEGINS HERE
+    cout<<"STUDENT CODE NOT IMPLEMENTED\n";
+    exit(1);
+
     return 0; // Placeholder line
 }
 int main(){

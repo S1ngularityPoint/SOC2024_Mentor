@@ -14,7 +14,7 @@
 - OPTIONAL : Try to implement the same functionality with integers instead of floating point numbers
 ### finalTask.cpp
 - Implement dot product of two vectors using SIMD instructions
-- See syntax in syntax.txt
+- See syntax and hints in `syntax.txt`
 - Compile using `g++ finalTask.cpp -mavx -o finalTask`
 - Run using `./finalTask`
 - Share your speedup over naive implementation for large (size >= 1000) vectors

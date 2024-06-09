@@ -62,7 +62,7 @@ ll solution_M(ll* coins, int n, ll sum){
     Count_M++; // Do not remove this line
     ll N = 0;
     // STUDENT CODE BEGINS HERE
-    cout<<"MEMOIZATION NOT IMPLEMENTED\n";
+    cout<<"STUDENT CODE NOT IMPLEMENTED\n";
     exit(1);
     return N;
 }
