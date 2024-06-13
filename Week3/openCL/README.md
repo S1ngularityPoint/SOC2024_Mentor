@@ -10,7 +10,7 @@
 - If you have a dedicated GPU, congratulations, you should be able to take full advantage of openCL, follow the instructions on `https://github.com/ProjectPhysX/FluidX3D/blob/master/DOCUMENTATION.md#0-intstall-gpu-drivers-and-opencl-runtime`, (go to the top of the page and expand Section 0 : `Intstall GPU Drivers and OpenCL Runtime`) first run the instructions for your GPU and after that run the instructions for installation on CPU, it should work
 - Confirm your installation by running `sudo apt install clinfo && clinfo`, the output should be something along the lines of `found x devices` and not `no openCL runtime found!`
 ### Getting started
-- Ok, you successfully setup openCL, good job, I'm proud of you, now we're going to be working with an altered version of the `OpenCL-Wrapper`, created by `ProjectPhysX`, without him even setting up openCL would have been impossible, so full credit for this part of the SoC goes to him
+- Ok, you successfully setup openCL, good job, I'm proud of you, now we're going to be working with an altered version of the `OpenCL-Wrapper`, created by `ProjectPhysX`, without him, even setting up openCL would have been impossible, so full credit for this part of the SoC goes to him
 - The reason is that openCL by default is very verbose and has a very cumbersome syntax, this section is simply going to highlight a very simple work case of openCL and we will only touch upon the very top of the iceberg
 - Its a very powerfull tool and we highly recommend exploring it further in your own time
 - We will be working with just two `.cpp` files, `OpenCL-Wrapper/OpenCL-Wrapper/src/main.cpp` and `OpenCL-Wrapper/OpenCL-Wrapper/src/kernel.cpp` 
