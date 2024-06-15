@@ -15,7 +15,7 @@ Each node contains 3 members :
 1] value - the integer value of the node (unique to each node)
 2] bit - a character of each node (not necessarily unique)
 3] children - a vector containing pointers to all children of the node
-YOU MUST OUTPERFORM THE NAIVE IMPLEMENTATION FOR LARGE VALUES OF N
+YOU MUST OUTPERFORM THE NAIVE IMPLEMENTATION
 
 */
 
@@ -24,6 +24,7 @@ public:
     int value;
     vector<node*> children;
     char bit;
+    node* parent;
 };
 
 class tree {
@@ -57,15 +58,7 @@ public:
 };
 
 string naiveSearch (tree &T, int k) {
-/* 
-
-    NAIVE IMPLEMENTATION, DONE FOR YOU
-    INPUT : Tree T, int k
-    OUTPUT : string s = secret(k)
-
-*/
-    map<node*, node*> fathers;
-    fathers[T.root] = NULL;
+    // std::cout<<"children size is "<<T.root->children.size()<<endl;
     queue<node*> q;
     q.push(T.root);
     while (!q.empty()) {
@@ -74,10 +67,10 @@ string naiveSearch (tree &T, int k) {
         if (tmp->value == k) {
             vector<node*> seq;
             seq.push_back(tmp);
-            node *u = fathers[tmp];
+            node *u = tmp->parent;
             while (u != NULL) {
                 seq.push_back(u);
-                u = fathers[u];    
+                u = u->parent;    
             }
             string t;
             for (int i=seq.size() - 1; i >= 0; i--) {
@@ -86,7 +79,6 @@ string naiveSearch (tree &T, int k) {
             return t;
         }
         for (auto x : tmp->children) {
-            fathers[x] = tmp;
             q.push(x);
         }
     }
@@ -94,15 +86,17 @@ string naiveSearch (tree &T, int k) {
 }
 
 string optim(tree &T, int k) {
-
 /*
 
 STUDENT CODE BEGINS HERE, ACHIEVE A SPEEDUP OVER NAIVE IMPLEMENTATION
 YOU MAY EDIT THIS FILE HOWEVER YOU WANT
-HINT : USE MULTITHREADING TO SEARCH MULTIPLE SUBTREES
-(Note we do not expect to see a speedup for low values of n, but for n > 5000)
+HINT : USE MULTITHREADING TO SEARCH IN SUBTREES THEN RETURN THE MOMENT U FIND IT
+(Note we do not expect to see a speedup for low values of n, but for n > 10000)
 
 */
+
+    cout<<"Student code not implemented\n";
+    exit(1);
 
 }
 
@@ -114,6 +108,7 @@ int main() {
     node* u = new node;
     u->value = 0;
     u->bit = 'a';
+    u->parent = NULL;
     T.root = u;
     list.push_back(u);
     char currChar = 'b';
@@ -128,8 +123,10 @@ int main() {
         }
         if (i % 3 == 0) {
             T.addConnection(list[i / 3 - 1], tmp);
+            tmp->parent = list[i/3-1];
         } else {
             T.addConnection(list[i / 3], tmp);
+            tmp->parent = list[i/3];
         }
         list.push_back(tmp);
     }
