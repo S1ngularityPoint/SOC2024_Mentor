@@ -5,6 +5,7 @@
 - You cannot do better than O(n) here! BFS/DFS are indeed the fastest available algorithms as the given tree does not have any kind of order
 - However, there is very little `overlap`, that is, `the results of one search does not help or hinder another`
 - Thus, one can exploit multithreading for this algorithm
+- Compile using `g++ treeSearch.cpp -mavx -o treeSearch`, add the mavx flag if and only if your implementation uses SIMD instructions
 ### quake3.cpp
 - Once upon a time, in the dark ages before good CISC architecture, when developers needed to quickly calculate inverse square roots they found no good method (Newton-Raphson/Gradient-Descent is cumbersome)
 - They stumbled upon some magical floating point values that could help them with their computation
@@ -30,3 +31,4 @@ float Q_rsqrt(float number)
 ```
 - You are forbidden from using the `sqrt()` method of the cmath library
 - However as you are working with large arrays, you might find that `SIMD` instructions are hiding something from you :)
+- Compile using `g++ quake3.cpp -mavx -o quake3`, add the mavx flag if and only if your implementation uses SIMD instructions
