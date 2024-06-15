@@ -1,13 +1,10 @@
 #include "opencl.hpp"
+#include <iostream>
 #include <chrono>
-
-// using namespace std;
-// using namespace chrono;
-
 int main() {
 	Device device(select_device_with_most_flops()); // compile OpenCL C code for the fastest available device
 
-	const __uint128_t N = (8192*8192*16); // size of vectors
+	const uint N = 1024u; // size of vectors
 	Memory<float> A(device, N); // allocate memory on both host and device
 	Memory<float> B(device, N);
 	Memory<float> C(device, N);
@@ -20,16 +17,27 @@ int main() {
 		C[n] = 1.0f;
 	}
 
-	print_info("Value before kernel execution: C[0] = "+to_string(C[0]));
+	std::cout<<"Printing value of C before addition : ";
+	for (uint i=0u; i<N; i++) {
+		std::cout<<C[i]<<" ";
+	}
+	std::cout<<std::endl;
+
 	auto start = std::chrono::high_resolution_clock::now();
 	A.write_to_device(); // copy data from host memory to device memory
 	B.write_to_device();
 	add_kernel.run(); // run add_kernel on the device
 	C.read_from_device(); // copy data from device memory to host memory
 	auto end = std::chrono::high_resolution_clock::now();
-	print_info("Value after kernel execution: C[0] = "+to_string(C[0]));
 	auto elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-	std::cout << "Time taken " << elapsed.count() << "\n";
+	
+	std::cout<<"Vector addition done, printing value of C : ";
+	for (uint i=0u; i<N; i++) {
+		std::cout<<C[i]<<" ";
+	} 
+	std::cout<<std::endl;
+	std::cout << "Time taken : " << elapsed.count() << "\n";
 	wait();
+	
 	return 0;
 }
