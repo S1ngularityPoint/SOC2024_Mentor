@@ -20,8 +20,12 @@
 ### Task 1
 - Understand the vector addition mechanics and write code to do element-wise vector multiplication
 - Make the appropriate changes in `main.cpp` and in `kernel.cpp`
+- Post the time difference you get on whatsapp (naive will be faster here, don't worry)
 ### Task 2
 - Write an implementation of matrix multiplication by making appropriate changes in `main.cpp` and `kernel.cpp`
 - I swear this is the last unique matrix multiplication implementation you will be doing lol
-### OPTIONAL BUT HIGHLY RECOMMENDED
-- Create a timer to compare naive implementation with openCL
+- Post the speedup you get on whatsapp (Depending on your environment, openCL implementation could be around 20 times faster)
+### Theory
+- Speculate on why naive is (or at least should be), about 50-100 times faster in vector addition and element-wise multiplication 
+- Hint : It has to do with device interconnects/bus
+- Post your speculation on whatsapp

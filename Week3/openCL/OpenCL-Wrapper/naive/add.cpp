@@ -25,7 +25,7 @@ int main(){
 	} 
 	std::cout<<std::endl;
 	auto elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-	std::cout << "Time taken : " << elapsed.count() << "\n";
+	std::cout << "(naive implementation) Time taken : " << elapsed.count() << "\n";
     delete [] C;
     delete [] B;
     delete [] A;

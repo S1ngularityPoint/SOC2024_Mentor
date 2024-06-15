@@ -36,8 +36,8 @@ int main () {
 		std::cout<<"\n";
 	}	
 
-    std::cout << "Time taken : " << elapsed.count() << "\n";
+    std::cout << "(openCL implementation) Time taken : " << elapsed.count() << "\n";
 
-    wait();
+    // wait();
     return 0;
 }
