@@ -48,7 +48,6 @@ public:
     }
     ~tree() {
         for (int i=0; i<n; i++) {
-            // cout << "Deleting node with value: " << listOfNodes[i]->value << endl;
             delete listOfNodes[i];
         }
     }
@@ -58,14 +57,13 @@ public:
 };
 
 string naiveSearch (tree &T, int k) {
-    // std::cout<<"children size is "<<T.root->children.size()<<endl;
     queue<node*> q;
     q.push(T.root);
     while (!q.empty()) {
         node *tmp = q.front();
         q.pop();
-        if (tmp->value == k) {
-            vector<node*> seq;
+        if (tmp->value == k) { // found it!
+            vector<node*> seq; // vector to construct the string
             seq.push_back(tmp);
             node *u = tmp->parent;
             while (u != NULL) {
@@ -89,7 +87,7 @@ string optim(tree &T, int k) {
 /*
 
 STUDENT CODE BEGINS HERE, ACHIEVE A SPEEDUP OVER NAIVE IMPLEMENTATION
-YOU MAY EDIT THIS FILE HOWEVER YOU WANT
+YOU MAY EDIT THIS FILE HOWEVER YOU WANT (as long as you don't touch main or naiveSearch)
 HINT : USE MULTITHREADING TO SEARCH IN SUBTREES THEN RETURN THE MOMENT U FIND IT
 (Note we do not expect to see a speedup for low values of n, but for n > 10000)
 

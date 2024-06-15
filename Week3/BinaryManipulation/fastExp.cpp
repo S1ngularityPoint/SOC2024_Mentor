@@ -26,8 +26,8 @@ ll fastPower(ll a , ll b){ // Note - a^b shouldn't be more than 1e18 otherwise t
     ll m = a;
     ll i = 1;
     while(b >= i){
-        if(b&i) ans*= m; // if the (log i)th bit is set in b
-        m*=m;
+        if(b&i) ans*= m; // if the (log i)th bit is set in b, then ans = ans*m
+        m*=m; // update m so that m = a^(2^i)
         i= i<<1;
     }
     return ans;

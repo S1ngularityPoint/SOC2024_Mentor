@@ -17,20 +17,23 @@ ll naive (ll n) {
     return dp[n];
 }
 
-pp m(pp &p1, pp &p2){ 
-    return mp(mp(p1.first.first*p2.first.first + p1.first.second*p2.second.first, p1.first.first*p2.first.second + p1.first.second*p2.second.second), mp(p1.second.first*p2.first.first + p1.second.second*p2.second.first, p1.second.first*p2.first.second + p1.second.second*p2.second.second));
-}
-
 ll optim(ll n){
-    ll t = n-1;
-    pp x = mp(mp(1,1),mp(1,0));
-    pp ans = mp(mp(1,0),mp(0,1));
-    while(t > 0){
-        if(t&1) ans = m(ans,x);
-        x = m(x,x);
-        t = t>>1;
-    }
-    return ans.first.first;
+/*
+
+STUDENT CODE BEGINS HERE, ACHIEVE A SPEEDUP OVER NAIVE IMPLEMENTATION
+YOU MAY EDIT THIS FILE HOWEVER YOU WANT
+HINT : Use the same principle behind fast exponentiation, to calculate the nth fibonacci number in O(logn) time complexity
+You can view the tuple (f(n), f(n-1)) as a matrix multiplication of ((1,1),(1,0))*(f(n-1),f(n-2)) 
+because f(n) = f(n-1)*1 + f(n-2)*1 while f(n-1) = 1*f(n-1) + 0*f(n-2)
+Therefore, we can compute (f(n),f(n-1)) is equal to {((1,1),(1,0))^(n-1)} * (f(1),f(0))
+This can be computed in O(logn) time
+We expect your code to be faster (and completely inaccurate, as even naive method is inaccurate) for n >= 1000
+
+*/
+
+cout<<"Student code not implemented\n";
+exit(1);
+
 }
 
 int main(){
