@@ -17,10 +17,6 @@ matrix::matrix(const matrix& other) {
 }
 
 matrix& matrix::operator=(const matrix& other) {
-    // if (this == &other) {
-    //     return *this; // Handle self-assignment
-    // }
-
     // Allocate new resource
     rows = other.rows;
     cols = other.cols;

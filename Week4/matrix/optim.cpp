@@ -1,30 +1,26 @@
 #include "matrix.h"
 
 matrix::matrix(unsigned long rowNum, unsigned long colNum){
-    throw std::invalid_argument("CONSTRUCTOR NOT IMPLEMENTED!\n"); // lmao how will u optimise this
+    throw std::invalid_argument("CONSTRUCTOR NOT IMPLEMENTED!\n"); // Not optimisable
     data.resize(rowNum*colNum,0);
     rows = rowNum;
     cols = colNum;
 }
 
 matrix::matrix(unsigned long size){
-    throw std::invalid_argument("1D CONSTRUCTOR NOT IMPLEMENTED!\n"); // lmao how will u optimise this
+    throw std::invalid_argument("1D CONSTRUCTOR NOT IMPLEMENTED!\n"); // Not optimisable
     matrix(size,1);
 }
 
 matrix::matrix(const matrix& other) {
-    throw std::invalid_argument("COPY CONSTRUCTOR NOT IMPLEMENTED!\n"); // lmao how will u optimise this
+    throw std::invalid_argument("COPY CONSTRUCTOR NOT IMPLEMENTED!\n"); // Not optimisable
     data = other.data;
     rows = other.rows;
     cols = other.cols;
 }
 
 matrix& matrix::operator=(const matrix& other) {
-    throw std::invalid_argument("EQUALITY OPERATOR NOT IMPLEMENTED!\n"); // lmao how will u optimise this
-    if (this == &other) {
-        return *this; // Handle self-assignment
-    }
-
+    throw std::invalid_argument("EQUALITY OPERATOR NOT IMPLEMENTED!\n"); // Not optimisable
     // Allocate new resource
     rows = other.rows;
     cols = other.cols;
