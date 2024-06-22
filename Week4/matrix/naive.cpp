@@ -193,32 +193,48 @@ matrix matrix::transpose(){
 }
 
 double matrix::determinant(){
-    matrix a = *this;
-    pair<unsigned long, unsigned long> dim = a.shape();
-    if (dim.first != dim.second) 
-        throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
-    unsigned long n = dim.first;
-    if (n == 1) {
-        return a(0, 0);
-    } else if (n == 2) {
-        return a(0, 0) * a(1, 1) - a(0, 1) * a(1, 0);
-    } else {
-        double det = 0;
-        for (unsigned long p = 0; p < n; ++p) {
-            matrix submatrix(n - 1, n - 1);
-            for (unsigned long i = 1; i < n; ++i) {
-                unsigned long colIdx = 0;
-                for (unsigned long j = 0; j < n; ++j) {
-                    if (j == p) continue;
-                    submatrix(i - 1, colIdx) = a(i, j);
-                    colIdx++;
-                }
+    if (rows != cols) {
+        throw std::invalid_argument("Matrix must be square to calculate determinant");
+    }
+    unsigned long n = rows;
+    matrix a(*this); // Make a copy of the matrix
+
+    double det = 1;
+    for (unsigned long i = 0; i < n; ++i) {
+        // Find the pivot
+        unsigned long pivot = i;
+        for (unsigned long j = i + 1; j < n; ++j) {
+            if (abs(a.data[j * n + i]) > abs(a.data[pivot * n + i])) {
+                pivot = j;
             }
-            double subDet = submatrix.determinant();
-            det += (p % 2 == 0 ? 1 : -1) * a(0, p) * subDet;
         }
-        return det;
-    }   
+
+        // Swap rows if needed
+        if (pivot != i) {
+            for (unsigned long k = 0; k < n; ++k) {
+                std::swap(a.data[i * n + k], a.data[pivot * n + k]);
+            }
+            det *= -1; // Swap changes the sign of the determinant
+        }
+
+        // Check for zero pivot
+        if (a.data[i * n + i] == 0) {
+            return 0; // Determinant is zero
+        }
+
+        // Eliminate the column
+        for (unsigned long j = i + 1; j < n; ++j) {
+            double factor = a.data[j * n + i] / a.data[i * n + i];
+            for (unsigned long k = i; k < n; ++k) {
+                a.data[j * n + k] -= factor * a.data[i * n + k];
+            }
+        }
+
+        // Multiply the diagonal elements
+        det *= a.data[i * n + i];
+    }
+
+    return det;
 }
 
 matrix zeros(unsigned long rows, unsigned long cols){
