@@ -179,6 +179,45 @@ matrix inverse(const matrix& a){
     }
     return result;
 }
+
+matrix transpose(const matrix& a){
+    pair<unsigned long,unsigned long> dim = a.shape();
+    matrix T(dim.second,dim.first);
+    for (int i = 0 ; i < a.rows ; i++){
+        for (int j = 0 ; j < a.cols ; j++){
+            T(j,i) = a(i,j);
+        }
+    }
+    return T;
+}
+
+double determinant(const matrix& a){
+    pair<unsigned long, unsigned long> dim = a.shape();
+    if (dim.first != dim.second) 
+        throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
+    unsigned long n = dim.first;
+    if (n == 1) {
+        return a(0, 0);
+    } else if (n == 2) {
+        return a(0, 0) * a(1, 1) - a(0, 1) * a(1, 0);
+    } else {
+        double det = 0;
+        for (unsigned long p = 0; p < n; ++p) {
+            matrix submatrix(n - 1, n - 1);
+            for (unsigned long i = 1; i < n; ++i) {
+                unsigned long colIdx = 0;
+                for (unsigned long j = 0; j < n; ++j) {
+                    if (j == p) continue;
+                    submatrix(i - 1, colIdx) = a(i, j);
+                    colIdx++;
+                }
+            }
+            double subDet = determinant(submatrix);
+            det += (p % 2 == 0 ? 1 : -1) * a(0, p) * subDet;
+        }
+        return det;
+    }   
+}
 matrix zeros(unsigned long rows, unsigned long cols){
     return matrix(rows,cols);
 }
