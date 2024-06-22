@@ -17,9 +17,9 @@ matrix::matrix(const matrix& other) {
 }
 
 matrix& matrix::operator=(const matrix& other) {
-    if (this == &other) {
-        return *this; // Handle self-assignment
-    }
+    // if (this == &other) {
+    //     return *this; // Handle self-assignment
+    // }
 
     // Allocate new resource
     rows = other.rows;
@@ -31,7 +31,7 @@ matrix& matrix::operator=(const matrix& other) {
 
 matrix operator+(const matrix& first, const matrix& second){
     if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
     else{
         matrix sum(first.rows,first.cols);
@@ -44,7 +44,7 @@ matrix operator+(const matrix& first, const matrix& second){
 
 matrix operator-(const matrix& first, const matrix& second){
     if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
     else{
         matrix sum(first.rows,first.cols);
@@ -57,7 +57,7 @@ matrix operator-(const matrix& first, const matrix& second){
 
 matrix operator*(const matrix& first, const matrix& second){
     if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
     else{
         matrix sum(first.rows,first.cols);
@@ -70,7 +70,7 @@ matrix operator*(const matrix& first, const matrix& second){
 
 matrix operator/(const matrix& first, const matrix& second){
     if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
     else{
         matrix sum(first.rows,first.cols);
@@ -117,7 +117,7 @@ matrix matmul(const matrix& first, const matrix& second){
     pair<unsigned long, unsigned long> dim1 = first.shape();
     pair<unsigned long, unsigned long> dim2 = second.shape();
     if( dim1.second != dim2.first){
-        throw std::invalid_argument("cannot matmul ( "+ to_string(dim1.first) +" , " + to_string(dim1.second) + " ) with ( " + to_string(dim2.first) + " , " + to_string(dim2.second) + " )" );
+        throw std::invalid_argument("Cannot matmul ( "+ to_string(dim1.first) +" , " + to_string(dim1.second) + " ) with ( " + to_string(dim2.first) + " , " + to_string(dim2.second) + " )" );
     }
     else{
         matrix net(dim1.first,dim2.second);
@@ -134,6 +134,51 @@ matrix matmul(const matrix& first, const matrix& second){
     }
 }
 
+matrix inverse(const matrix& a){
+    pair<unsigned long, unsigned long> dim = a.shape();
+    if (dim.first != dim.second) 
+        throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
+    unsigned long n = a.rows;
+    matrix augmented(n, 2 * n);
+    // Initialize the augmented matrix with the identity matrix on the right
+    for (unsigned long i = 0; i < n; ++i) {
+        for (unsigned long j = 0; j < n; ++j) {
+            augmented(i, j) = a(i, j);
+            augmented(i, j + n) = (i == j) ? 1.0 : 0.0;
+        }
+    }
+    // Perform Gauss-Jordan elimination
+    for (unsigned long i = 0; i < n; ++i) {
+        // Find the pivot
+        double pivot = augmented(i, i);
+        if (pivot == 0.0) {
+            throw runtime_error("Matrix is singular and cannot be inverted.");
+        }
+
+        // Normalize the pivot row
+        for (unsigned long j = 0; j < 2 * n; ++j) {
+            augmented(i, j) /= pivot;
+        }
+
+        // Eliminate the current column in other rows
+        for (unsigned long k = 0; k < n; ++k) {
+            if (k != i) {
+                double factor = augmented(k, i);
+                for (unsigned long j = 0; j < 2 * n; ++j) {
+                    augmented(k, j) -= factor * augmented(i, j);
+                }
+            }
+        }
+    }
+    // Extract the inverse matrix from the augmented matrix
+    matrix result(n, n);
+    for (unsigned long i = 0; i < n; ++i) {
+        for (unsigned long j = 0; j < n; ++j) {
+            result(i, j) = augmented(i, j + n);
+        }
+    }
+    return result;
+}
 matrix zeros(unsigned long rows, unsigned long cols){
     return matrix(rows,cols);
 }
