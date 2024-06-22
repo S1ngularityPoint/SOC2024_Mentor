@@ -30,55 +30,243 @@ matrix& matrix::operator=(const matrix& other) {
 }
 
 matrix operator+(const matrix& first, const matrix& second){
-    if (first.rows!=second.rows || first.cols!=second.cols){
+    if (first.rows!=second.rows && first.cols!=second.cols){
         throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
-    else{
+    else if (first.rows == second.rows && first.cols == second.cols) {
         matrix sum(first.rows,first.cols);
         for( unsigned long i=0;i<first.rows*first.cols;i++){
             sum.data[i]=first.data[i]+second.data[i];
         }
         return sum;
     }
+    else if (first.rows == second.rows) {
+        if (first.cols == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = second.data[i*second.cols+j] + first.data[i];
+                }
+            }
+            return sum;
+        }
+        else if (second.cols == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] + second.data[i];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        }
+    }
+    else if (first.cols == second.cols) {
+        if (first.rows == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = second.data[i*second.cols+j] + first.data[j];
+                }
+            }
+            return sum;
+        }
+        else if (second.rows == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] + second.data[j];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        }
+    }
+    return zeros(1,1);
 }
 
 matrix operator-(const matrix& first, const matrix& second){
-    if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+    if (first.rows!=second.rows && first.cols!=second.cols){
+        throw std::invalid_argument("Cannot subtract ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
         }
-    else{
+    else if (first.rows == second.rows && first.cols == second.cols) {
         matrix sum(first.rows,first.cols);
         for( unsigned long i=0;i<first.rows*first.cols;i++){
             sum.data[i]=first.data[i]-second.data[i];
         }
         return sum;
     }
+    else if (first.rows == second.rows) {
+        if (first.cols == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = first.data[i] - second.data[i*second.cols+j];
+                }
+            }
+            return sum;
+        }
+        else if (second.cols == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] - second.data[i];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot subtract ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
+        }
+    }
+    else if (first.cols == second.cols) {
+        if (first.rows == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = first.data[j] - second.data[i*second.cols+j];
+                }
+            }
+            return sum;
+        }
+        else if (second.rows == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] - second.data[j];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot subtract ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
+        }
+    }
+    return zeros(1,1);
 }
 
 matrix operator*(const matrix& first, const matrix& second){
-    if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+    if (first.rows!=second.rows && first.cols!=second.cols){
+        throw std::invalid_argument("Cannot multiply ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
-    else{
+    else if (first.rows == second.rows && first.cols == second.cols) {
         matrix sum(first.rows,first.cols);
         for( unsigned long i=0;i<first.rows*first.cols;i++){
             sum.data[i]=first.data[i]*second.data[i];
         }
         return sum;
     }
+    else if (first.rows == second.rows) {
+        if (first.cols == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = second.data[i*second.cols+j] * first.data[i];
+                }
+            }
+            return sum;
+        }
+        else if (second.cols == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] * second.data[i];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot multiply ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        }
+    }
+    else if (first.cols == second.cols) {
+        if (first.rows == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = second.data[i*second.cols+j] * first.data[j];
+                }
+            }
+            return sum;
+        }
+        else if (second.rows == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] * second.data[j];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot multiply ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        }
+    }
+    return zeros(1,1);
 }
 
 matrix operator/(const matrix& first, const matrix& second){
-    if (first.rows!=second.rows || first.cols!=second.cols){
-        throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+    if (first.rows!=second.rows && first.cols!=second.cols){
+        throw std::invalid_argument("Cannot divide ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
         }
-    else{
+    else if (first.rows == second.rows && first.cols == second.cols) {
         matrix sum(first.rows,first.cols);
         for( unsigned long i=0;i<first.rows*first.cols;i++){
             sum.data[i]=first.data[i]/second.data[i];
         }
         return sum;
     }
+    else if (first.rows == second.rows) {
+        if (first.cols == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = first.data[i] / second.data[i*second.cols+j];
+                }
+            }
+            return sum;
+        }
+        else if (second.cols == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] / second.data[i];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot divide ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
+        }
+    }
+    else if (first.cols == second.cols) {
+        if (first.rows == 1) { // np.broadcast
+            matrix sum(second.rows, second.cols);
+            for (int i = 0; i<second.rows; i++) {
+                for (int j=0; j<second.cols; j++) {
+                    sum.data[i*second.cols + j] = first.data[j] / second.data[i*second.cols+j];
+                }
+            }
+            return sum;
+        }
+        else if (second.rows == 1) {
+            matrix sum(first.rows, first.cols);
+            for (int i = 0; i<first.rows; i++) {
+                for (int j=0; j<first.cols; j++) {
+                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] / second.data[j];
+                }
+            }
+            return sum;
+        }
+        else {
+            throw std::invalid_argument("Cannot divide ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
+        }
+    }
+    return zeros(1,1);
 }
 
 matrix operator*(const matrix& first, const double t) {
