@@ -1,6 +1,4 @@
 #include "../matrix/matrix.h"
-extern matrix transpose(const matrix& a);
-extern double determinant(const matrix& a);
 /*
 
 This file checks implementation and timing of the following functions : 
@@ -35,7 +33,7 @@ void test_matrix_inverse() {
     A.printMatrix();
 
     try {
-        matrix A_inv = inverse(A);
+        matrix A_inv = A.inverse();
         std::cout << "\nInverse of A:\n";
         A_inv.printMatrix();
 
@@ -64,7 +62,7 @@ void test_matrix_determinant() {
     A.printMatrix();
 
     try {
-        double det_A = determinant(A);
+        double det_A = A.determinant();
         std::cout << "\nDeterminant of A: " << det_A << "\n";
 
         // Check the determinant value here, if needed
@@ -84,7 +82,7 @@ void test_matrix_transpose() {
     std::cout << "Matrix A:\n";
     A.printMatrix();
 
-    matrix A_trans = transpose(A);
+    matrix A_trans = A.transpose();
     std::cout << "\nTranspose of A:\n";
     A_trans.printMatrix();
     cout << "\n";
@@ -94,39 +92,5 @@ int main () {
     test_matrix_inverse();
     test_matrix_transpose();
     test_matrix_determinant();
-    matrix a(identity(2));
-    std::cout<<"Printing a:\n";
-    /*
-    
-    EXPECTED OUTPUT:
-    1 0 
-    0 1
-
-    */
-    a.printMatrix();
-    
-    matrix b = exp(a);
-    std::cout<<"Printing b:\n";
-    /*
-    
-    EXPECTED OUTPUT:
-    e 1 
-    1 e
-
-    */
-    b.printMatrix();
-
-
-    matrix c = b+1;
-    c = matmul(c,b);
-    std::cout<<"Printing c:\n";
-    /*
-    
-    EXPECTED OUTPUT:
-    12.11 9.15 
-    9.15 12.11
-
-    */
-    c.printMatrix();
 
 }

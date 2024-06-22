@@ -548,3 +548,93 @@ matrix sqrt(matrix &a) {
     }
     return res;    
 }
+
+matrix matrix::inverse(){
+    throw std::invalid_argument("MATRIX INVERSE FUNCTION NOT IMPLEMENTED!\n"); // you can definitely optimise this
+    matrix a = *this;
+    pair<unsigned long, unsigned long> dim = a.shape();
+    if (dim.first != dim.second) 
+        throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
+    unsigned long n = a.rows;
+    matrix augmented(n, 2 * n);
+    // Initialize the augmented matrix with the identity matrix on the right
+    for (unsigned long i = 0; i < n; ++i) {
+        for (unsigned long j = 0; j < n; ++j) {
+            augmented(i, j) = a(i, j);
+            augmented(i, j + n) = (i == j) ? 1.0 : 0.0;
+        }
+    }
+    // Perform Gauss-Jordan elimination
+    for (unsigned long i = 0; i < n; ++i) {
+        // Find the pivot
+        double pivot = augmented(i, i);
+        if (pivot == 0.0) {
+            throw runtime_error("Matrix is singular and cannot be inverted.");
+        }
+
+        // Normalize the pivot row
+        for (unsigned long j = 0; j < 2 * n; ++j) {
+            augmented(i, j) /= pivot;
+        }
+
+        // Eliminate the current column in other rows
+        for (unsigned long k = 0; k < n; ++k) {
+            if (k != i) {
+                double factor = augmented(k, i);
+                for (unsigned long j = 0; j < 2 * n; ++j) {
+                    augmented(k, j) -= factor * augmented(i, j);
+                }
+            }
+        }
+    }
+    // Extract the inverse matrix from the augmented matrix
+    matrix result(n, n);
+    for (unsigned long i = 0; i < n; ++i) {
+        for (unsigned long j = 0; j < n; ++j) {
+            result(i, j) = augmented(i, j + n);
+        }
+    }
+    return result;
+}
+
+matrix matrix::transpose(){
+    throw std::invalid_argument("MATRIX TRANSPOSE FUNCTION NOT IMPLEMENTED!\n"); // you can definitely optimise this
+    pair<unsigned long,unsigned long> dim = this->shape();
+    matrix T(dim.second,dim.first);
+    for (int i = 0 ; i < this->rows ; i++){
+        for (int j = 0 ; j < this->cols ; j++){
+            T(j,i) = this->data[i*this->cols + j];
+        }
+    }
+    return T;
+}
+
+double matrix::determinant(){
+    throw std::invalid_argument("MATRIX DETERMINANT FUNCTION NOT IMPLEMENTED!\n"); // you can definitely optimise this
+    matrix a = *this;
+    pair<unsigned long, unsigned long> dim = a.shape();
+    if (dim.first != dim.second) 
+        throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
+    unsigned long n = dim.first;
+    if (n == 1) {
+        return a(0, 0);
+    } else if (n == 2) {
+        return a(0, 0) * a(1, 1) - a(0, 1) * a(1, 0);
+    } else {
+        double det = 0;
+        for (unsigned long p = 0; p < n; ++p) {
+            matrix submatrix(n - 1, n - 1);
+            for (unsigned long i = 1; i < n; ++i) {
+                unsigned long colIdx = 0;
+                for (unsigned long j = 0; j < n; ++j) {
+                    if (j == p) continue;
+                    submatrix(i - 1, colIdx) = a(i, j);
+                    colIdx++;
+                }
+            }
+            double subDet = submatrix.determinant();
+            det += (p % 2 == 0 ? 1 : -1) * a(0, p) * subDet;
+        }
+        return det;
+    }   
+}

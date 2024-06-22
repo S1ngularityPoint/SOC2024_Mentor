@@ -134,7 +134,8 @@ matrix matmul(const matrix& first, const matrix& second){
     }
 }
 
-matrix inverse(const matrix& a){
+matrix matrix::inverse(){
+    matrix a = *this;
     pair<unsigned long, unsigned long> dim = a.shape();
     if (dim.first != dim.second) 
         throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
@@ -180,18 +181,19 @@ matrix inverse(const matrix& a){
     return result;
 }
 
-matrix transpose(const matrix& a){
-    pair<unsigned long,unsigned long> dim = a.shape();
+matrix matrix::transpose(){
+    pair<unsigned long,unsigned long> dim = this->shape();
     matrix T(dim.second,dim.first);
-    for (int i = 0 ; i < a.rows ; i++){
-        for (int j = 0 ; j < a.cols ; j++){
-            T(j,i) = a(i,j);
+    for (int i = 0 ; i < this->rows ; i++){
+        for (int j = 0 ; j < this->cols ; j++){
+            T(j,i) = this->data[i*this->cols + j];
         }
     }
     return T;
 }
 
-double determinant(const matrix& a){
+double matrix::determinant(){
+    matrix a = *this;
     pair<unsigned long, unsigned long> dim = a.shape();
     if (dim.first != dim.second) 
         throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
@@ -212,12 +214,13 @@ double determinant(const matrix& a){
                     colIdx++;
                 }
             }
-            double subDet = determinant(submatrix);
+            double subDet = submatrix.determinant();
             det += (p % 2 == 0 ? 1 : -1) * a(0, p) * subDet;
         }
         return det;
     }   
 }
+
 matrix zeros(unsigned long rows, unsigned long cols){
     return matrix(rows,cols);
 }

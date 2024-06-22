@@ -74,6 +74,11 @@ class matrix{
 
         friend matrix operator/(const matrix&first, const double t); // float division operator : A[i][j] = first[i][j]/t
 
+        matrix transpose(); // transpose function : A[i][j] = a[j][i]
+
+        matrix inverse(); // inverse function : A = a^(-1), i.e., matmul(A,a) = I
+
+        double determinant(); // determinant function (google)
 };
 
 matrix zeros(unsigned long rows, unsigned long cols); // zeros function : A = np.zeros((rows,cols))
@@ -115,5 +120,3 @@ matrix log(matrix &a,double logbase); // elementwise log operator : matr[i][j] =
 matrix sqrt(matrix &a); // elementwise sqrt function : matr[i][j] = sqrt(matr[i][j]) 
 
 matrix matmul(const matrix& first, const matrix& second); // matmul function, A = first*second
-
-matrix inverse(const matrix&a); // inverse function, A = a^(-1), i.e. A*a = I
