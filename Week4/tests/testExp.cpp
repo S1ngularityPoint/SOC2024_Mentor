@@ -2,7 +2,7 @@
 
 /*
 
-This file checks implementation and timing of the following functions : 
+This file checks implementation of the following functions : 
 1]tanh
 2]fabs
 3]exp

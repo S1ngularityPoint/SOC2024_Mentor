@@ -13,12 +13,6 @@ This file checks implementation of the following functions :
 8]division operator
 9]identity function
 
-Timing is checked of the following functions : 
-1]addition operator
-2]subtraction operator
-3]multiplication operator
-4]division operator
-
 */
 
 int main () {
@@ -96,8 +90,5 @@ int main () {
 
     */
     f.printMatrix();
-
-    // IMPLEMENTATION CHECK OVER, TIMING CHECK BEGINS
-    //todo: Implement timing
 
 }

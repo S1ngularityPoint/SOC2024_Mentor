@@ -66,13 +66,13 @@ class matrix{
 
         friend matrix operator/(const matrix& first, const matrix& second); // elementwise division operator
         
-        friend matrix operator*(const matrix&first, const double t);
+        friend matrix operator+(const matrix&first, const double t); // float addition operator : A[i][j] = first[i][j]+t
 
-        friend matrix operator+(const matrix&first, const double t);
+        friend matrix operator-(const matrix&first, const double t); // float subtraction operator : A[i][j] = first[i][j]-t
 
-        friend matrix operator-(const matrix&first, const double t);
+        friend matrix operator*(const matrix&first, const double t); // float multiplication operator : A[i][j] = first[i][j]*t
 
-        friend matrix operator/(const matrix&first, const double t);
+        friend matrix operator/(const matrix&first, const double t); // float division operator : A[i][j] = first[i][j]/t
 
 };
 
