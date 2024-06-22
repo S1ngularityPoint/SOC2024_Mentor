@@ -64,12 +64,17 @@ class matrix{
 
         friend matrix operator*(const matrix& first, const matrix& second); // elementwise multiplication operator
 
+        friend matrix operator/(const matrix& first, const matrix& second); // elementwise division operator
+        
         friend matrix operator*(const matrix&first, const double t);
 
-        friend matrix operator/(const matrix& first, const matrix& second); // elementwise division operator
-};
+        friend matrix operator+(const matrix&first, const double t);
 
-matrix matmul(const matrix& first, const matrix& second); // matmul function, A = first*second
+        friend matrix operator-(const matrix&first, const double t);
+
+        friend matrix operator/(const matrix&first, const double t);
+
+};
 
 matrix zeros(unsigned long rows, unsigned long cols); // zeros function : A = np.zeros((rows,cols))
 
@@ -106,3 +111,9 @@ matrix fabs(matrix &a); // elementwise fabs function : matr[i][j] = fabs(matr[i]
 matrix exp(matrix &a); // elementwise exponentiator : matr[i][j] = fabs(matr[i][j])
 
 matrix log(matrix &a,double logbase); // elementwise log operator : matr[i][j] = log_{logbase}(matr[i][j])
+
+matrix sqrt(matrix &a); // elementwise sqrt function : matr[i][j] = sqrt(matr[i][j]) 
+
+matrix matmul(const matrix& first, const matrix& second); // matmul function, A = first*second
+
+matrix inverse(const matrix&a); // inverse function, A = a^(-1), i.e. A*a = I

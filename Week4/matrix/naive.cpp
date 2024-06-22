@@ -68,14 +68,6 @@ matrix operator*(const matrix& first, const matrix& second){
     }
 }
 
-matrix operator*(const matrix& first, const double t) {
-    matrix sum(first.rows, first.cols);
-    for (unsigned long i=0; i<first.rows*first.cols; i++) {
-        sum.data[i] = first.data[i]*t;
-    }
-    return sum;
-}
-
 matrix operator/(const matrix& first, const matrix& second){
     if (first.rows!=second.rows || first.cols!=second.cols){
         throw std::invalid_argument("cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
@@ -87,6 +79,38 @@ matrix operator/(const matrix& first, const matrix& second){
         }
         return sum;
     }
+}
+
+matrix operator*(const matrix& first, const double t) {
+    matrix sum(first.rows, first.cols);
+    for (unsigned long i=0; i<first.rows*first.cols; i++) {
+        sum.data[i] = first.data[i]*t;
+    }
+    return sum;
+}
+
+matrix operator+(const matrix& first, const double t) {
+    matrix sum(first.rows, first.cols);
+    for (unsigned long i=0; i<first.rows*first.cols; i++) {
+        sum.data[i] = first.data[i]+t;
+    }
+    return sum;
+}
+
+matrix operator-(const matrix& first, const double t) {
+    matrix sum(first.rows, first.cols);
+    for (unsigned long i=0; i<first.rows*first.cols; i++) {
+        sum.data[i] = first.data[i]-t;
+    }
+    return sum;
+}
+
+matrix operator/(const matrix& first, const double t) {
+    matrix sum(first.rows, first.cols);
+    for (unsigned long i=0; i<first.rows*first.cols; i++) {
+        sum.data[i] = first.data[i]/t;
+    }
+    return sum;
 }
 
 matrix matmul(const matrix& first, const matrix& second){
@@ -483,4 +507,12 @@ matrix log(matrix &a, double logbase) {
         res.data[i]=std::log(a.data[i])/std::log(logbase);
     }
     return res;
+}
+
+matrix sqrt(matrix &a) {
+    matrix res(a.rows,a.cols);
+    for (unsigned long i=0;i<a.rows*a.cols;i++){
+        res.data[i]=std::sqrt(a.data[i]);
+    }
+    return res;    
 }
