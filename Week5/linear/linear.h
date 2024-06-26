@@ -1,28 +1,38 @@
+#ifndef LINEAR
+#define LINEAR
 #include "matrix/matrix.h"
-#define E 1e15
-
-typedef pair<unsigned long,unsigned long> __size;
+#include <random>
+#include <algorithm>
+#define EPS 1e-15
+#define ETA 0.001
 
 class LinearRegression{
     private:
-        unsigned long d; // The dimensions of the data. Each datapoint is a dx1 vector
+        uint64_t d; // The dimensions of the data. Each datapoint is a dx1 vector
         matrix weights; // The weights are a dx1 vector
-        double bias; // The bias is a scalar
+        matrix weights_;
         double epsilon; 
+        double eta;
+        uint64_t max_iterations;
+        vector<double> train_loss;
+        vector<double> test_loss;
+
     public:
         /*
-            * Input is a matrix of dimensions d x n where each column of the matrix is a data point and there are n 
+            * Input is a matrix of dimensions n x d where each row of the matrix is a data point and there are n 
             * datapoints each of dimensions d x 1.
-            * The true output values is another matrix of dimensions 1 x n 
+            * The true output values is another matrix of dimensions n x 1 
+            * Predictions are done as y_pred = x.T o w 
+            * For the entire dataset X, Y_pred = Xw
         */
-        LinearRegression(unsigned long);
-        pair<matrix,matrix> split(matrix, float); // To split the input dataset into ttrain and test
-        void l2loss(matrix,matrix); // Finds the loss given the weights vector, the input data set and the true output values
-        void l2lossDerivative();
-        void train();
-        void test();
+        LinearRegression(uint64_t);
+        double l2loss(matrix, matrix); // Finds the loss given the weights vector, the input data set and the true output values
+        matrix l2lossDerivative(matrix, matrix);
+        void GD(matrix, matrix, double, uint64_t);
+        void train(matrix, matrix, double, uint64_t);
+        void test(matrix, matrix);
         matrix predict(matrix);
-        void GD();
 };
 
-LinearRegression L;
+pair<pair<matrix, matrix>, pair<matrix, matrix>> test_train_split(matrix X, matrix Y, float ratio); // To split the input dataset into train and test
+#endif

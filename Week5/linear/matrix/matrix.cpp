@@ -1,12 +1,12 @@
 #include "matrix.h"
 
-matrix::matrix(unsigned long rowNum, unsigned long colNum){
+matrix::matrix(uint64_t rowNum, uint64_t colNum){
     data = vector<double>(rowNum*colNum);
     rows = rowNum;
     cols = colNum;
 }
 
-matrix::matrix(unsigned long size){
+matrix::matrix(uint64_t size){
     matrix(size,1);
 }
 
@@ -32,10 +32,10 @@ matrix& matrix::operator=(const matrix& other) {
 matrix operator+(const matrix& first, const matrix& second){
     if (first.rows!=second.rows && first.cols!=second.cols){
         throw std::invalid_argument("Cannot add ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
-        }
+    }
     else if (first.rows == second.rows && first.cols == second.cols) {
         matrix sum(first.rows,first.cols);
-        for( unsigned long i=0;i<first.rows*first.cols;i++){
+        for( uint64_t i=0;i<first.rows*first.cols;i++){
             sum.data[i]=first.data[i]+second.data[i];
         }
         return sum;
@@ -94,30 +94,30 @@ matrix operator-(const matrix& first, const matrix& second){
         throw std::invalid_argument("Cannot subtract ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
         }
     else if (first.rows == second.rows && first.cols == second.cols) {
-        matrix sum(first.rows,first.cols);
-        for( unsigned long i=0;i<first.rows*first.cols;i++){
-            sum.data[i]=first.data[i]-second.data[i];
+        matrix diff(first.rows,first.cols);
+        for( uint64_t i=0;i<first.rows*first.cols;i++){
+            diff.data[i]=first.data[i]-second.data[i];
         }
-        return sum;
+        return diff;
     }
     else if (first.rows == second.rows) {
         if (first.cols == 1) { // np.broadcast
-            matrix sum(second.rows, second.cols);
+            matrix diff(second.rows, second.cols);
             for (int i = 0; i<second.rows; i++) {
                 for (int j=0; j<second.cols; j++) {
-                    sum.data[i*second.cols + j] = first.data[i] - second.data[i*second.cols+j];
+                    diff.data[i*second.cols + j] = first.data[i] - second.data[i*second.cols+j];
                 }
             }
-            return sum;
+            return diff;
         }
         else if (second.cols == 1) {
-            matrix sum(first.rows, first.cols);
+            matrix diff(first.rows, first.cols);
             for (int i = 0; i<first.rows; i++) {
                 for (int j=0; j<first.cols; j++) {
-                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] - second.data[i];
+                    diff.data[i*first.cols + j] = first.data[i*first.cols+j] - second.data[i];
                 }
             }
-            return sum;
+            return diff;
         }
         else {
             throw std::invalid_argument("Cannot subtract ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
@@ -125,22 +125,22 @@ matrix operator-(const matrix& first, const matrix& second){
     }
     else if (first.cols == second.cols) {
         if (first.rows == 1) { // np.broadcast
-            matrix sum(second.rows, second.cols);
+            matrix diff(second.rows, second.cols);
             for (int i = 0; i<second.rows; i++) {
                 for (int j=0; j<second.cols; j++) {
-                    sum.data[i*second.cols + j] = first.data[j] - second.data[i*second.cols+j];
+                    diff.data[i*second.cols + j] = first.data[j] - second.data[i*second.cols+j];
                 }
             }
-            return sum;
+            return diff;
         }
         else if (second.rows == 1) {
-            matrix sum(first.rows, first.cols);
+            matrix diff(first.rows, first.cols);
             for (int i = 0; i<first.rows; i++) {
                 for (int j=0; j<first.cols; j++) {
-                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] - second.data[j];
+                    diff.data[i*first.cols + j] = first.data[i*first.cols+j] - second.data[j];
                 }
             }
-            return sum;
+            return diff;
         }
         else {
             throw std::invalid_argument("Cannot subtract ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
@@ -151,33 +151,34 @@ matrix operator-(const matrix& first, const matrix& second){
 
 matrix operator*(const matrix& first, const matrix& second){
     if (first.rows!=second.rows && first.cols!=second.cols){
-        throw std::invalid_argument("Cannot multiply ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
+        cout << "*" << endl;
+        throw std::invalid_argument("Cannot multiply(elementwise) ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
         }
     else if (first.rows == second.rows && first.cols == second.cols) {
-        matrix sum(first.rows,first.cols);
-        for( unsigned long i=0;i<first.rows*first.cols;i++){
-            sum.data[i]=first.data[i]*second.data[i];
+        matrix prod(first.rows,first.cols);
+        for( uint64_t i=0;i<first.rows*first.cols;i++){
+            prod.data[i]=first.data[i]*second.data[i];
         }
-        return sum;
+        return prod;
     }
     else if (first.rows == second.rows) {
         if (first.cols == 1) { // np.broadcast
-            matrix sum(second.rows, second.cols);
+            matrix prod(second.rows, second.cols);
             for (int i = 0; i<second.rows; i++) {
                 for (int j=0; j<second.cols; j++) {
-                    sum.data[i*second.cols + j] = second.data[i*second.cols+j] * first.data[i];
+                    prod.data[i*second.cols + j] = second.data[i*second.cols+j] * first.data[i];
                 }
             }
-            return sum;
+            return prod;
         }
         else if (second.cols == 1) {
-            matrix sum(first.rows, first.cols);
+            matrix prod(first.rows, first.cols);
             for (int i = 0; i<first.rows; i++) {
                 for (int j=0; j<first.cols; j++) {
-                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] * second.data[i];
+                    prod.data[i*first.cols + j] = first.data[i*first.cols+j] * second.data[i];
                 }
             }
-            return sum;
+            return prod;
         }
         else {
             throw std::invalid_argument("Cannot multiply ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
@@ -185,22 +186,22 @@ matrix operator*(const matrix& first, const matrix& second){
     }
     else if (first.cols == second.cols) {
         if (first.rows == 1) { // np.broadcast
-            matrix sum(second.rows, second.cols);
+            matrix prod(second.rows, second.cols);
             for (int i = 0; i<second.rows; i++) {
                 for (int j=0; j<second.cols; j++) {
-                    sum.data[i*second.cols + j] = second.data[i*second.cols+j] * first.data[j];
+                    prod.data[i*second.cols + j] = second.data[i*second.cols+j] * first.data[j];
                 }
             }
-            return sum;
+            return prod;
         }
         else if (second.rows == 1) {
-            matrix sum(first.rows, first.cols);
+            matrix prod(first.rows, first.cols);
             for (int i = 0; i<first.rows; i++) {
                 for (int j=0; j<first.cols; j++) {
-                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] * second.data[j];
+                    prod.data[i*first.cols + j] = first.data[i*first.cols+j] * second.data[j];
                 }
             }
-            return sum;
+            return prod;
         }
         else {
             throw std::invalid_argument("Cannot multiply ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
@@ -209,35 +210,36 @@ matrix operator*(const matrix& first, const matrix& second){
     return zeros(1,1);
 }
 
+
 matrix operator/(const matrix& first, const matrix& second){
     if (first.rows!=second.rows && first.cols!=second.cols){
         throw std::invalid_argument("Cannot divide ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
         }
     else if (first.rows == second.rows && first.cols == second.cols) {
-        matrix sum(first.rows,first.cols);
-        for( unsigned long i=0;i<first.rows*first.cols;i++){
-            sum.data[i]=first.data[i]/second.data[i];
+        matrix quotient(first.rows,first.cols);
+        for( uint64_t i=0;i<first.rows*first.cols;i++){
+            quotient.data[i]=first.data[i]/second.data[i];
         }
-        return sum;
+        return quotient;
     }
     else if (first.rows == second.rows) {
         if (first.cols == 1) { // np.broadcast
-            matrix sum(second.rows, second.cols);
+            matrix quotient(second.rows, second.cols);
             for (int i = 0; i<second.rows; i++) {
                 for (int j=0; j<second.cols; j++) {
-                    sum.data[i*second.cols + j] = first.data[i] / second.data[i*second.cols+j];
+                    quotient.data[i*second.cols + j] = first.data[i] / second.data[i*second.cols+j];
                 }
             }
-            return sum;
+            return quotient;
         }
         else if (second.cols == 1) {
-            matrix sum(first.rows, first.cols);
+            matrix quotient(first.rows, first.cols);
             for (int i = 0; i<first.rows; i++) {
                 for (int j=0; j<first.cols; j++) {
-                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] / second.data[i];
+                    quotient.data[i*first.cols + j] = first.data[i*first.cols+j] / second.data[i];
                 }
             }
-            return sum;
+            return quotient;
         }
         else {
             throw std::invalid_argument("Cannot divide ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
@@ -245,22 +247,22 @@ matrix operator/(const matrix& first, const matrix& second){
     }
     else if (first.cols == second.cols) {
         if (first.rows == 1) { // np.broadcast
-            matrix sum(second.rows, second.cols);
+            matrix quotient(second.rows, second.cols);
             for (int i = 0; i<second.rows; i++) {
                 for (int j=0; j<second.cols; j++) {
-                    sum.data[i*second.cols + j] = first.data[j] / second.data[i*second.cols+j];
+                    quotient.data[i*second.cols + j] = first.data[j] / second.data[i*second.cols+j];
                 }
             }
-            return sum;
+            return quotient;
         }
         else if (second.rows == 1) {
-            matrix sum(first.rows, first.cols);
+            matrix quotient(first.rows, first.cols);
             for (int i = 0; i<first.rows; i++) {
                 for (int j=0; j<first.cols; j++) {
-                    sum.data[i*first.cols + j] = first.data[i*first.cols+j] / second.data[j];
+                    quotient.data[i*first.cols + j] = first.data[i*first.cols+j] / second.data[j];
                 }
             }
-            return sum;
+            return quotient;
         }
         else {
             throw std::invalid_argument("Cannot divide ( "+ to_string(second.rows) +" , " + to_string(second.cols) + " ) from ( " + to_string(first.rows) + " , " + to_string(first.cols) + " )" );
@@ -270,49 +272,99 @@ matrix operator/(const matrix& first, const matrix& second){
 }
 
 matrix operator*(const matrix& first, const double t) {
-    matrix sum(first.rows, first.cols);
-    for (unsigned long i=0; i<first.rows*first.cols; i++) {
-        sum.data[i] = first.data[i]*t;
+    matrix prod(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        prod.data[i] = first.data[i]*t;
     }
-    return sum;
+    return prod;
+}
+
+matrix operator*(const double t, const matrix& first){
+    matrix prod(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        prod.data[i] = first.data[i]*t;
+    }
+    return prod;  
 }
 
 matrix operator+(const matrix& first, const double t) {
     matrix sum(first.rows, first.cols);
-    for (unsigned long i=0; i<first.rows*first.cols; i++) {
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
         sum.data[i] = first.data[i]+t;
     }
     return sum;
 }
 
 matrix operator-(const matrix& first, const double t) {
-    matrix sum(first.rows, first.cols);
-    for (unsigned long i=0; i<first.rows*first.cols; i++) {
-        sum.data[i] = first.data[i]-t;
+    matrix diff(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        diff.data[i] = first.data[i]-t;
     }
-    return sum;
+    return diff;
 }
 
 matrix operator/(const matrix& first, const double t) {
-    matrix sum(first.rows, first.cols);
-    for (unsigned long i=0; i<first.rows*first.cols; i++) {
-        sum.data[i] = first.data[i]/t;
+    matrix quotient(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        quotient.data[i] = first.data[i]/t;
     }
-    return sum;
+    return quotient;
+}
+
+matrix& operator+=(matrix& self,const matrix& other){
+    __size d1 = self.shape(), d2 = other.shape();
+    if (d1 != d2){
+        throw std::invalid_argument("Cannot add ( "+ to_string(other.rows) +" , " + to_string(other.cols) + 
+        " ) to ( " + to_string(self.rows) + " , " + to_string(self.cols) + " )" );
+    }
+    for (uint64_t i = 0 ; i < self.rows ; i++){
+        for (uint64_t j  = 0 ; j < self.cols ; j++){
+            self(i,j) += other(i,j);
+        }
+    }
+    return self;
+}
+
+matrix& operator-=(matrix& self,const matrix& other){
+    __size d1 = self.shape(), d2 = other.shape();
+    if (d1 != d2){
+        throw std::invalid_argument("Cannot subtract ( "+ to_string(other.rows) +" , " + to_string(other.cols) + 
+        " ) from ( " + to_string(self.rows) + " , " + to_string(self.cols) + " )" );
+    }
+    for (uint64_t i = 0 ; i < self.rows ; i++){
+        for (uint64_t j  = 0 ; j < self.cols ; j++){
+            self(i,j) -= other(i,j);
+        }
+    }
+    return self;
+}
+
+matrix& operator*=(matrix& self,const matrix& other){
+    __size d1 = self.shape(), d2 = other.shape();
+    if (d1 != d2){
+        throw std::invalid_argument("Cannot multiply(elementwise) ( "+ to_string(other.rows) +" , " + to_string(other.cols) + 
+        " ) with ( " + to_string(self.rows) + " , " + to_string(self.cols) + " )" );
+    }
+    for (uint64_t i = 0 ; i < self.rows ; i++){
+        for (uint64_t j  = 0 ; j < self.cols ; j++){
+            self(i,j) *= other(i,j);
+        }
+    }
+    return self;
 }
 
 matrix matmul(const matrix& first, const matrix& second){
-    pair<unsigned long, unsigned long> dim1 = first.shape();
-    pair<unsigned long, unsigned long> dim2 = second.shape();
+    __size dim1 = first.shape();
+    __size dim2 = second.shape();
     if( dim1.second != dim2.first){
         throw std::invalid_argument("Cannot matmul ( "+ to_string(dim1.first) +" , " + to_string(dim1.second) + " ) with ( " + to_string(dim2.first) + " , " + to_string(dim2.second) + " )" );
     }
     else{
         matrix net(dim1.first,dim2.second);
-        for( unsigned long i=0;i< dim1.first;i++){
-            for(unsigned long j=0;j< dim2.second;j++){
+        for( uint64_t i=0;i< dim1.first;i++){
+            for(uint64_t j=0;j< dim2.second;j++){
                 double sum=0;
-                for(unsigned long k=0;k< dim1.second;k++){
+                for(uint64_t k=0;k< dim1.second;k++){
                     sum+=first(i,k)*second(k,j);
                 }
                 net(i,j)=sum;
@@ -322,13 +374,13 @@ matrix matmul(const matrix& first, const matrix& second){
     }
 }
 
-float dot(const matrix& first, const matrix& second){
-    pair<unsigned long, unsigned long> dim1 = first.shape();
-    pair<unsigned long, unsigned long> dim2 = second.shape();
+double dot(const matrix& first, const matrix& second){
+    __size dim1 = first.shape();
+    __size dim2 = second.shape();
     if (dim1.first != 1 || dim1.second != dim2.first || dim2.second != 1){
         throw std::invalid_argument("Cannot dot vector with dimensions ( "+ to_string(dim1.first) +" , " + to_string(dim1.second) + " ) with  a vector with dimensions ( " + to_string(dim2.first) + " , " + to_string(dim2.second) + " )" );
     }
-    unsigned long n = dim1.second;
+    uint64_t n = dim1.second;
     float d = 0;
     for (unsigned i = 0 ; i < n ; i++){
         d += first(0,i)*second(i,0);
@@ -336,22 +388,38 @@ float dot(const matrix& first, const matrix& second){
     return d;
 }
 
+double norm(const matrix& v){
+    __size dim = v.shape();
+    if (dim.first != 1 && dim.second != 1){
+        throw std::invalid_argument("Cannot compute norm of vector with dimensions ( "+ to_string(dim.first)+" , "+ to_string(dim.second) + " )");
+    }
+    uint64_t n = dim.first, m = dim.second;
+    double N = 0;
+    for (uint64_t i = 0 ; i < n ; i++){
+        for (uint64_t j = 0 ; j < m ; j++){
+            N += (v(i,j))*(v(i,j));
+        }
+    }
+    N = sqrt(N);
+    return N;    
+}
+
 matrix matrix::inverse(){
     matrix a = *this;
-    pair<unsigned long, unsigned long> dim = a.shape();
+    __size dim = a.shape();
     if (dim.first != dim.second) 
         throw std::invalid_argument("Cannot invert ( "+ to_string(dim.first) +" , " + to_string(dim.second) + " )");
-    unsigned long n = a.rows;
+    uint64_t n = a.rows;
     matrix augmented(n, 2 * n);
     // Initialize the augmented matrix with the identity matrix on the right
-    for (unsigned long i = 0; i < n; ++i) {
-        for (unsigned long j = 0; j < n; ++j) {
+    for (uint64_t i = 0; i < n; ++i) {
+        for (uint64_t j = 0; j < n; ++j) {
             augmented(i, j) = a(i, j);
             augmented(i, j + n) = (i == j) ? 1.0 : 0.0;
         }
     }
     // Perform Gauss-Jordan elimination
-    for (unsigned long i = 0; i < n; ++i) {
+    for (uint64_t i = 0; i < n; ++i) {
         // Find the pivot
         double pivot = augmented(i, i);
         if (pivot == 0.0) {
@@ -359,15 +427,15 @@ matrix matrix::inverse(){
         }
 
         // Normalize the pivot row
-        for (unsigned long j = 0; j < 2 * n; ++j) {
+        for (uint64_t j = 0; j < 2 * n; ++j) {
             augmented(i, j) /= pivot;
         }
 
         // Eliminate the current column in other rows
-        for (unsigned long k = 0; k < n; ++k) {
+        for (uint64_t k = 0; k < n; ++k) {
             if (k != i) {
                 double factor = augmented(k, i);
-                for (unsigned long j = 0; j < 2 * n; ++j) {
+                for (uint64_t j = 0; j < 2 * n; ++j) {
                     augmented(k, j) -= factor * augmented(i, j);
                 }
             }
@@ -375,8 +443,8 @@ matrix matrix::inverse(){
     }
     // Extract the inverse matrix from the augmented matrix
     matrix result(n, n);
-    for (unsigned long i = 0; i < n; ++i) {
-        for (unsigned long j = 0; j < n; ++j) {
+    for (uint64_t i = 0; i < n; ++i) {
+        for (uint64_t j = 0; j < n; ++j) {
             result(i, j) = augmented(i, j + n);
         }
     }
@@ -384,7 +452,7 @@ matrix matrix::inverse(){
 }
 
 matrix matrix::transpose(){
-    pair<unsigned long,unsigned long> dim = this->shape();
+    __size dim = this->shape();
     matrix T(dim.second,dim.first);
     for (int i = 0 ; i < this->rows ; i++){
         for (int j = 0 ; j < this->cols ; j++){
@@ -398,14 +466,14 @@ double matrix::determinant(){
     if (rows != cols) {
         throw std::invalid_argument("Matrix must be square to calculate determinant");
     }
-    unsigned long n = rows;
+    uint64_t n = rows;
     matrix a(*this); // Make a copy of the matrix
 
     double det = 1;
-    for (unsigned long i = 0; i < n; ++i) {
+    for (uint64_t i = 0; i < n; ++i) {
         // Find the pivot
-        unsigned long pivot = i;
-        for (unsigned long j = i + 1; j < n; ++j) {
+        uint64_t pivot = i;
+        for (uint64_t j = i + 1; j < n; ++j) {
             if (abs(a.data[j * n + i]) > abs(a.data[pivot * n + i])) {
                 pivot = j;
             }
@@ -413,7 +481,7 @@ double matrix::determinant(){
 
         // Swap rows if needed
         if (pivot != i) {
-            for (unsigned long k = 0; k < n; ++k) {
+            for (uint64_t k = 0; k < n; ++k) {
                 std::swap(a.data[i * n + k], a.data[pivot * n + k]);
             }
             det *= -1; // Swap changes the sign of the determinant
@@ -425,9 +493,9 @@ double matrix::determinant(){
         }
 
         // Eliminate the column
-        for (unsigned long j = i + 1; j < n; ++j) {
+        for (uint64_t j = i + 1; j < n; ++j) {
             double factor = a.data[j * n + i] / a.data[i * n + i];
-            for (unsigned long k = i; k < n; ++k) {
+            for (uint64_t k = i; k < n; ++k) {
                 a.data[j * n + k] -= factor * a.data[i * n + k];
             }
         }
@@ -439,15 +507,15 @@ double matrix::determinant(){
     return det;
 }
 
-matrix zeros(unsigned long rows, unsigned long cols){
+matrix zeros(uint64_t rows, uint64_t cols){
     return matrix(rows,cols);
 }
 
-matrix zeros(unsigned long size){
+matrix zeros(uint64_t size){
     return matrix(size);
 }
 
-matrix eye(unsigned long size){
+matrix eye(uint64_t size){
     matrix diag(size,size);
     for(int i=0;i<size;i++){
         diag(i,i)=1;
@@ -455,7 +523,7 @@ matrix eye(unsigned long size){
     return diag;
 }
 
-matrix eye(unsigned long rows, unsigned long cols){
+matrix eye(uint64_t rows, uint64_t cols){
     matrix diag(rows,cols);
     for(int i=0;i<min(rows,cols);i++){
         diag(i,i)=1;
@@ -463,7 +531,7 @@ matrix eye(unsigned long rows, unsigned long cols){
     return diag;
 }
 
-matrix identity(unsigned long size){
+matrix identity(uint64_t size){
     return eye(size);
 }
 
@@ -477,9 +545,9 @@ matrix max(matrix &arr,int axis) {
     matrix result(axis == 0 ? 1 : twoRows, axis == 0 ? twoCols : 1);
 
     if (axis == 0) {  //largest each col 
-        for (unsigned long col = 0; col < twoCols; ++col) {
+        for (uint64_t col = 0; col < twoCols; ++col) {
             double max_value = arr(0, col);
-            for (unsigned long row = 1; row < twoRows; ++row) {
+            for (uint64_t row = 1; row < twoRows; ++row) {
                 if (arr(row, col) > max_value) {
                     max_value = arr(row, col);
                 }
@@ -487,9 +555,9 @@ matrix max(matrix &arr,int axis) {
             result(0, col) = max_value;
         }
     } else {  //largest for each row
-        for (unsigned long row = 0; row < twoRows; ++row) {
+        for (uint64_t row = 0; row < twoRows; ++row) {
             double max_value = arr(row, 0);
-            for (unsigned long col = 1; col < twoCols; ++col) {
+            for (uint64_t col = 1; col < twoCols; ++col) {
                 if (arr(row, col) > max_value) {
                     max_value = arr(row, col);
                 }
@@ -511,10 +579,10 @@ matrix argmax(matrix &arr,int axis) {
     matrix result(axis == 0 ? 1 : twoRows, axis == 0 ? twoCols : 1);
 
     if (axis == 0) {  // Argmax along columns (resulting in row vector)
-        for (unsigned long col = 0; col < twoCols; ++col) {
+        for (uint64_t col = 0; col < twoCols; ++col) {
             double max_value = arr(0, col);
-            unsigned long max_index = 0;
-            for (unsigned long row = 1; row < twoRows; ++row) {
+            uint64_t max_index = 0;
+            for (uint64_t row = 1; row < twoRows; ++row) {
                 if (arr(row, col) > max_value) {
                     max_value = arr(row, col);
                     max_index = row;
@@ -523,10 +591,10 @@ matrix argmax(matrix &arr,int axis) {
             result(0, col) = max_index;
         }
     } else {  // Argmax along rows (resulting in column vector)
-        for (unsigned long row = 0; row < twoRows; ++row) {
+        for (uint64_t row = 0; row < twoRows; ++row) {
             double max_value = arr(row, 0);
-            unsigned long max_index = 0;
-            for (unsigned long col = 1; col < twoCols; ++col) {
+            uint64_t max_index = 0;
+            for (uint64_t col = 1; col < twoCols; ++col) {
                 if (arr(row, col) > max_value) {
                     max_value = arr(row, col);
                     max_index = col;
@@ -545,10 +613,10 @@ matrix max (matrix &arr) {
     arrCols = arr.shape().second;
     if (arrRows != 1 && arrCols != 1) {
         matrix result(1, arrCols);
-        for (unsigned long col = 0; col < arrCols; ++col) {
+        for (uint64_t col = 0; col < arrCols; ++col) {
             double max_value = arr(0, col);
-            unsigned long max_index = 0;
-            for (unsigned long row = 1; row < arrRows; ++row) {
+            uint64_t max_index = 0;
+            for (uint64_t row = 1; row < arrRows; ++row) {
                 if (arr(row, col) > max_value) {
                     max_value = arr(row, col);
                     max_index = row;
@@ -561,7 +629,7 @@ matrix max (matrix &arr) {
     else if (arrRows == 1) {
         matrix t(1,1);
         t(0,0) = arr(0,0);
-        for (unsigned long col = 1; col < arrCols; ++col) {
+        for (uint64_t col = 1; col < arrCols; ++col) {
             t(0,0) = max(t(0,0),arr(0,col));
         }
         return t;
@@ -569,7 +637,7 @@ matrix max (matrix &arr) {
     else {
         matrix t(1,1);
         t(0,0) = arr(0,0);
-        for (unsigned long row = 1; row < arrRows; ++row) {
+        for (uint64_t row = 1; row < arrRows; ++row) {
             t(0,0) = max(t(0,0),arr(row,0));
         }
         return t;
@@ -584,10 +652,10 @@ matrix argmax (matrix &arr) {
     arrCols = arr.shape().second;
     if (arrRows != 1 && arrCols != 1) {
         matrix result(1, arrCols);
-        for (unsigned long col = 0; col < arrCols; ++col) {
+        for (uint64_t col = 0; col < arrCols; ++col) {
             double max_value = arr(0, col);
-            unsigned long max_index = 0;
-            for (unsigned long row = 1; row < arrRows; ++row) {
+            uint64_t max_index = 0;
+            for (uint64_t row = 1; row < arrRows; ++row) {
                 if (arr(row, col) > max_value) {
                     max_value = arr(row, col);
                     max_index = row;
@@ -600,7 +668,7 @@ matrix argmax (matrix &arr) {
     else if (arrRows == 1) {
         matrix t(1,1);
         t(0,0) = 0;
-        for (unsigned long col = 1; col < arrCols; ++col) {
+        for (uint64_t col = 1; col < arrCols; ++col) {
             if (arr(0,t(0,0)) < arr(col)) {
                 t(0,0) = col;
             }
@@ -610,7 +678,7 @@ matrix argmax (matrix &arr) {
     else {
         matrix t(1,1);
         t(0,0) = 0;
-        for (unsigned long row = 1; row < arrRows; ++row) {
+        for (uint64_t row = 1; row < arrRows; ++row) {
             if (arr(t(0,0),0) < arr(row)) {
                 t(0,0) = row;
             }
@@ -630,9 +698,9 @@ matrix min(matrix &arr,int axis) {
     matrix result(axis == 0 ? 1 : twoRows, axis == 0 ? twoCols : 1);
 
     if (axis == 0) {  //largest each col 
-        for (unsigned long col = 0; col < twoCols; ++col) {
+        for (uint64_t col = 0; col < twoCols; ++col) {
             double max_value = arr(0, col);
-            for (unsigned long row = 1; row < twoRows; ++row) {
+            for (uint64_t row = 1; row < twoRows; ++row) {
                 if (arr(row, col) < max_value) {
                     max_value = arr(row, col);
                 }
@@ -640,9 +708,9 @@ matrix min(matrix &arr,int axis) {
             result(0, col) = max_value;
         }
     } else {  //largest for each row
-        for (unsigned long row = 0; row < twoRows; ++row) {
+        for (uint64_t row = 0; row < twoRows; ++row) {
             double max_value = arr(row, 0);
-            for (unsigned long col = 1; col < twoCols; ++col) {
+            for (uint64_t col = 1; col < twoCols; ++col) {
                 if (arr(row, col) < max_value) {
                     max_value = arr(row, col);
                 }
@@ -664,10 +732,10 @@ matrix argmin(matrix &arr,int axis) {
     matrix result(axis == 0 ? 1 : twoRows, axis == 0 ? twoCols : 1);
 
     if (axis == 0) {  // Argmax along columns (resulting in row vector)
-        for (unsigned long col = 0; col < twoCols; ++col) {
+        for (uint64_t col = 0; col < twoCols; ++col) {
             double max_value = arr(0, col);
-            unsigned long max_index = 0;
-            for (unsigned long row = 1; row < twoRows; ++row) {
+            uint64_t max_index = 0;
+            for (uint64_t row = 1; row < twoRows; ++row) {
                 if (arr(row, col) < max_value) {
                     max_value = arr(row, col);
                     max_index = row;
@@ -676,10 +744,10 @@ matrix argmin(matrix &arr,int axis) {
             result(0, col) = max_index;
         }
     } else {  // Argmax along rows (resulting in column vector)
-        for (unsigned long row = 0; row < twoRows; ++row) {
+        for (uint64_t row = 0; row < twoRows; ++row) {
             double max_value = arr(row, 0);
-            unsigned long max_index = 0;
-            for (unsigned long col = 1; col < twoCols; ++col) {
+            uint64_t max_index = 0;
+            for (uint64_t col = 1; col < twoCols; ++col) {
                 if (arr(row, col) < max_value) {
                     max_value = arr(row, col);
                     max_index = col;
@@ -698,10 +766,10 @@ matrix min (matrix &arr) {
     arrCols = arr.shape().second;
     if (arrRows != 1 && arrCols != 1) {
         matrix result(1, arrCols);
-        for (unsigned long col = 0; col < arrCols; ++col) {
+        for (uint64_t col = 0; col < arrCols; ++col) {
             double max_value = arr(0, col);
-            unsigned long max_index = 0;
-            for (unsigned long row = 1; row < arrRows; ++row) {
+            uint64_t max_index = 0;
+            for (uint64_t row = 1; row < arrRows; ++row) {
                 if (arr(row, col) < max_value) {
                     max_value = arr(row, col);
                     max_index = row;
@@ -714,7 +782,7 @@ matrix min (matrix &arr) {
     else if (arrRows == 1) {
         matrix t(1,1);
         t(0,0) = arr(0,0);
-        for (unsigned long col = 1; col < arrCols; ++col) {
+        for (uint64_t col = 1; col < arrCols; ++col) {
             t(0,0) = min(t(0,0),arr(0,col));
         }
         return t;
@@ -722,7 +790,7 @@ matrix min (matrix &arr) {
     else {
         matrix t(1,1);
         t(0,0) = arr(0,0);
-        for (unsigned long row = 1; row < arrRows; ++row) {
+        for (uint64_t row = 1; row < arrRows; ++row) {
             t(0,0) = min(t(0,0),arr(row,0));
         }
         return t;
@@ -730,17 +798,16 @@ matrix min (matrix &arr) {
 
 }
 
-
 matrix argmin (matrix &arr) {
     double arrRows, arrCols;
     arrRows = arr.shape().first;
     arrCols = arr.shape().second;
     if (arrRows != 1 && arrCols != 1) {
         matrix result(1, arrCols);
-        for (unsigned long col = 0; col < arrCols; ++col) {
+        for (uint64_t col = 0; col < arrCols; ++col) {
             double max_value = arr(0, col);
-            unsigned long max_index = 0;
-            for (unsigned long row = 1; row < arrRows; ++row) {
+            uint64_t max_index = 0;
+            for (uint64_t row = 1; row < arrRows; ++row) {
                 if (arr(row, col) < max_value) {
                     max_value = arr(row, col);
                     max_index = row;
@@ -753,7 +820,7 @@ matrix argmin (matrix &arr) {
     else if (arrRows == 1) {
         matrix t(1,1);
         t(0,0) = 0;
-        for (unsigned long col = 1; col < arrCols; ++col) {
+        for (uint64_t col = 1; col < arrCols; ++col) {
             if (arr(0,t(0,0)) > arr(col)) {
                 t(0,0) = col;
             }
@@ -763,7 +830,7 @@ matrix argmin (matrix &arr) {
     else {
         matrix t(1,1);
         t(0,0) = 0;
-        for (unsigned long row = 1; row < arrRows; ++row) {
+        for (uint64_t row = 1; row < arrRows; ++row) {
             if (arr(t(0,0),0) > arr(row)) {
                 t(0,0) = row;
             }
@@ -774,7 +841,7 @@ matrix argmin (matrix &arr) {
 }
 
 
-matrix ones (unsigned long rows, unsigned long cols) {
+matrix ones (uint64_t rows, uint64_t cols) {
     matrix t(rows,cols);
     for (int i=0; i<rows*cols; i++) {
         t.data[i] = 1;
@@ -784,7 +851,7 @@ matrix ones (unsigned long rows, unsigned long cols) {
 
 matrix fabs(matrix &a) {
     matrix res(a.rows,a.cols);
-    for (unsigned long i=0;i<a.rows*a.cols;i++){
+    for (uint64_t i=0;i<a.rows*a.cols;i++){
         res.data[i]=std::fabs(a.data[i]);
     }
     return res;
@@ -792,7 +859,7 @@ matrix fabs(matrix &a) {
 
 matrix exp(matrix &a) {
     matrix res(a.rows,a.cols);
-    for (unsigned long i=0;i<a.rows*a.cols;i++){
+    for (uint64_t i=0;i<a.rows*a.cols;i++){
         res.data[i]=std::exp(a.data[i]);
     }
     return res;
@@ -800,7 +867,7 @@ matrix exp(matrix &a) {
 
 matrix tanh(matrix &a) {
     matrix res(a.rows,a.cols);
-    for (unsigned long i=0;i<a.rows*a.cols;i++){
+    for (uint64_t i=0;i<a.rows*a.cols;i++){
         res.data[i]=std::tanh(a.data[i]);
     }
     return res;
@@ -808,7 +875,7 @@ matrix tanh(matrix &a) {
 
 matrix log(matrix &a, double logbase) {
     matrix res(a.rows,a.cols);
-    for (unsigned long i=0;i<a.rows*a.cols;i++){
+    for (uint64_t i=0;i<a.rows*a.cols;i++){
         res.data[i]=std::log(a.data[i])/std::log(logbase);
     }
     return res;
@@ -816,7 +883,7 @@ matrix log(matrix &a, double logbase) {
 
 matrix sqrt(matrix &a) {
     matrix res(a.rows,a.cols);
-    for (unsigned long i=0;i<a.rows*a.cols;i++){
+    for (uint64_t i=0;i<a.rows*a.cols;i++){
         res.data[i]=std::sqrt(a.data[i]);
     }
     return res;    

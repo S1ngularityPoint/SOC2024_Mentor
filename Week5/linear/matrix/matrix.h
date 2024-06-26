@@ -1,58 +1,72 @@
+#ifndef MATRIX
+#define MATRIX
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <assert.h>
+#define PB push_back
 using namespace std;
+
+typedef pair<unsigned long,unsigned long> __size;
 
 class matrix{
     public:
 //==ACTUAL MATRIX================================================================================================================
-        unsigned long rows; // number of rows of the matrix
+        uint64_t rows; // number of rows of the matrix
 
-        unsigned long cols; // number of columns of the matrix 
+        uint64_t cols; // number of columns of the matrix 
 
         vector<double> data; // the data that the matrix has i.e. matrix itself
 //==CONSTRUCTORS=================================================================================================================
-        matrix(unsigned long rowNum, unsigned long colNum); // constructor, creates a matrix of 0s of dimensions (rowNum, colNum)
+        matrix(uint64_t rowNum, uint64_t colNum); // constructor, creates a matrix of 0s of dimensions (rowNum, colNum)
 
-        matrix(unsigned long size); // 1D matrix constructor, creates a 1D matrix (vector) of dimensions (size,1)
+        matrix(uint64_t size); // 1D matrix constructor, creates a 1D matrix (vector) of dimensions (size,1)
         
         matrix();
 //==UTILITY FUNCTIONS============================================================================================================
         void printMatrix() // utility function to print matrix 
         { 
-            for (int i=0; i<rows; i++) {
-                for (int j=0; j<cols; j++) {
-                    std::cout<<data[i*cols+j]<<" ";
+            for (int i = 0 ; i < rows ; i++) {
+                for (int j = 0; j < cols ; j++) {
+                    cout << data[i * cols + j]<<" ";
                 }
-                std::cout<<"\n";
+                cout << "\n";
             }
         }
 
-        double& operator()(unsigned long row_i, unsigned long col_i)  // access function, do not edit or try to implement
+        double& operator()(uint64_t row_i, uint64_t col_i)  // access function, do not edit or try to implement
         {
-            if(row_i>=rows ||col_i>=cols) throw std::out_of_range("Index out of bounds");
-            else return data[row_i*cols+col_i];
+            if(row_i >= rows ||col_i >= cols) throw out_of_range("Index out of bounds");
+            else return data[row_i * cols + col_i];
         }
 
-        const double& operator()(unsigned long row_i, unsigned long col_i)  // constant access function, do not edit or try to implement 
+        const double& operator()(uint64_t row_i, uint64_t col_i)  // constant access function, do not edit or try to implement 
         const{
-            if(row_i>=rows ||col_i>=cols) throw std::out_of_range("Index out of bounds");
-            else return data[row_i*cols+col_i];
+            if(row_i >= rows ||col_i >= cols) throw out_of_range("Index out of bounds");
+            else return data[row_i * cols + col_i];
         }
 
-        double& operator()(unsigned long i) // 1D matrix access function, do not edit or try to implement
+        double& operator()(uint64_t i) // 1D matrix access function, do not edit or try to implement
         {
-            if (cols != 1) throw std::invalid_argument("Use 2D indexer for 2D arrays");
+            if (cols != 1) throw invalid_argument("Use 2D indexer for 2D arrays");
             return (*this)(i, 0);
         }
 
-        const double& operator()(unsigned long i) // 1D matrix constant access function, do not edit or try to implement
+        const double& operator()(uint64_t i) // 1D matrix constant access function, do not edit or try to implement
         const{
-            if (cols != 1) throw std::invalid_argument("Use 2D indexer for 2D arrays");
+            if (cols != 1) throw invalid_argument("Use 2D indexer for 2D arrays");
             return (*this)(i, 0);
         }
+        
+        matrix operator[](uint64_t i){ // This returns a row vector of the matrix corresponding to row with index i
+            matrix v(1,cols);
+            for (uint64_t j = 0 ; j < rows ; j++){
+                v(0,j) = (*this)(i,j);
+            }
+            return v;
+        }
 
-        pair<unsigned long,unsigned long> shape() // function to get shape of matrix 
+        __size shape() // function to get shape of matrix 
         const{
             return make_pair(rows,cols);
         }
@@ -69,13 +83,22 @@ class matrix{
                                                                                                                                                                                 
         friend matrix operator/(const matrix& first, const matrix& second); // elementwise division operator, A[i][j] = first[i][j]/second[i][j]     
         
-        friend matrix operator+(const matrix&first, const double t); // float addition operator : A[i][j] = first[i][j]+t                               
+        friend matrix operator+(const matrix& first, const double t); // float addition operator : A[i][j] = first[i][j]+t                               
 
-        friend matrix operator-(const matrix&first, const double t); // float subtraction operator : A[i][j] = first[i][j]-t                                
+        friend matrix operator-(const matrix& first, const double t); // float subtraction operator : A[i][j] = first[i][j]-t                                
 
-        friend matrix operator*(const matrix&first, const double t); // float multiplication operator : A[i][j] = first[i][j]*t                         
-        
-        friend matrix operator/(const matrix&first, const double t); // float division operator : A[i][j] = first[i][j]/t                               
+        friend matrix operator*(const matrix& first, const double t); // float multiplication operator : A[i][j] = first[i][j]*t                         
+       
+        friend matrix operator*(const double t, const matrix& first); // float multiplication operator : A[i][j] = first[i][j]*t
+       
+        friend matrix operator/(const matrix& first, const double t); // float division operator : A[i][j] = first[i][j]/t                               
+
+        friend matrix& operator+=(matrix& self, const matrix& other); // adds other elementwise to self and stores it in self
+
+        friend matrix& operator-=(matrix& self, const matrix& other); // subtracts other elementwise from self and stores it in self
+
+        friend matrix& operator*=(matrix& self, const matrix& other); // multiplies other elementwise with self and stores it in self
+
 //==MATRIX OPERATIONS=================================================================================================================================
         matrix transpose(); // transpose function : A[i][j] = a[j][i]
 
@@ -86,19 +109,23 @@ class matrix{
 
 matrix matmul(const matrix& first, const matrix& second); // matmul function, A = first x second
 
-float dot(const matrix& first, const matrix& second); // dot product of first and second, d = first o second
+double dot(const matrix& first, const matrix& second); // dot product of first and second, d = first o second
+
+double norm(const matrix& v); // norm of a vector(l2 norm only) defined as \root(\Sigma v(i,0)*v(i,0)). Defined only for 1d matrices
+
 //==BASIC FUNCTIONS===================================================================================================================================
-matrix zeros(unsigned long rows, unsigned long cols); // zeros function : A[i][j] = 0 for all i in (0,rows) and for all j in (0,cols)
+matrix zeros(uint64_t rows, uint64_t cols); // zeros function : A[i][j] = 0 for all i in (0,rows) and for all j in (0,cols)
 
-matrix zeros(unsigned long size); // 1D zeros function : A[i] = 0 for all i in (0,size)
+matrix zeros(uint64_t size); // 1D zeros function : A[i] = 0 for all i in (0,size)
 
-matrix eye(unsigned long size); // 1D eye function : A = I(size) where I(x) is identity matrix with dimensions x https://en.wikipedia.org/wiki/Identity_matrix
+matrix eye(uint64_t size); // 1D eye function : A = I(size) where I(x) is identity matrix with dimensions x https://en.wikipedia.org/wiki/Identity_matrix
 
-matrix eye(unsigned long rows, unsigned long cols); // eye function : A = I(min(rows,cols)):zeros
+matrix eye(uint64_t rows, uint64_t cols); // eye function : A = I(min(rows,cols)):zeros
 
-matrix ones(unsigned long rows, unsigned long cols); // ones function : A = np.ones((rows,cols))
+matrix ones(uint64_t rows, uint64_t cols); // ones function : A = np.ones((rows,cols))
 
-matrix identity(unsigned long size); // identity matrix function : A = I(size)
+matrix identity(uint64_t size); // identity matrix function : A = I(size)
+
 //==MINMAX FUNCTIONS==================================================================================================================================
 /*
 
@@ -124,6 +151,7 @@ matrix argmin(matrix &arr,int axis); // specific argmin function : A = np.argmin
 matrix min(matrix &arr); // general min function : A = np.min(arr,0)
 
 matrix argmin(matrix &arr); // general argmin function : A = np.argmin(arr,0)
+
 //==ELEMENT FUNCTIONS================================================================================================================================
 matrix tanh(matrix &a); // elementwise tanh function : matr[i][j] = tanh(matr[i][j])
 
@@ -134,3 +162,5 @@ matrix exp(matrix &a); // elementwise exponentiator : matr[i][j] = fabs(matr[i][
 matrix log(matrix &a,double logbase); // elementwise log operator : matr[i][j] = log_{logbase}(matr[i][j])
 
 matrix sqrt(matrix &a); // elementwise sqrt function : matr[i][j] = sqrt(matr[i][j]) 
+
+#endif
