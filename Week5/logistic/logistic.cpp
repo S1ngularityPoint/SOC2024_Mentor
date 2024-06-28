@@ -1,30 +1,36 @@
-#include "linear.h"
+#include "logistic.h"
+#include "../matrix/matrix.h"
 
-LinearRegression::LinearRegression(uint64_t D){
+LogisticRegression::LogisticRegression(uint64_t D){
     d = D;
     weights = zeros(d,1);
-    weights_ = zeros(d,1);
     bias = 0;
     epsilon = EPS;
     eta = ETA;
 }
 
-double LinearRegression::l2loss(matrix X, matrix Y){
-    matrix Y_pred = matmul(X,weights) + bias;
+matrix LogisticRegression::sigmoid(matrix z){
+    matrix Z = -z;
+    return (1/(1 + exp(Z)));
+}
+
+double LogisticRegression::logisticLoss(matrix X, matrix Y){
+    matrix Y_pred = sigmoid((matmul(X,weights) + bias));
     __size d1 = Y.shape(), d2 = Y_pred.shape();
     if (d1 != d2){
         throw std::invalid_argument("Cannot compute loss of vectors with dimensions ( "+to_string(d1.first)+" , "
         +to_string(d1.second)+" ) and ( "+to_string(d2.first)+" , "+to_string(d2.second)+" ) do not match");
     }
     uint64_t n = max(d1.first,d1.second);
-    double loss = norm(Y_pred - Y);
-    loss *= loss;
+    matrix Yt = Y.transpose();
+    matrix Y_ = 1 - Y_pred;
+    double loss = -(dot(Yt,(log(Y_pred))) + dot(1 - Yt,(log(Y_))));
     loss /= n;
     return loss;
 }
 
-pair<matrix, double> LinearRegression::l2lossDerivative(matrix X, matrix Y){
-    matrix Y_pred = matmul(X,weights) + bias;
+pair<matrix, double> LogisticRegression::lossDerivative(matrix X, matrix Y){
+    matrix Y_pred = sigmoid((matmul(X,weights) + bias));
     __size d1 = Y.shape(), d2 = Y_pred.shape();
     if (d1 != d2){
         throw std::invalid_argument("Cannot compute loss derivative of vectors with dimensions ( "+to_string(d1.first)+" , "
@@ -32,37 +38,39 @@ pair<matrix, double> LinearRegression::l2lossDerivative(matrix X, matrix Y){
     }
     uint64_t n = X.shape().first;
     matrix Xt = X.transpose();
-    matrix Z = matmul(Xt,X);
-    matrix dw = (2/n)*(matmul(Z,weights) - matmul(Xt,Y)); 
-    double db = (2/n)*dot(ones(1,n),Y_pred - Y); 
+    matrix dw = matmul(Xt,Y_pred - Y)/n; 
+    double db = dot(Y_pred.transpose(),ones(n,1))/n;
     return {dw,db};
 }
 
-matrix LinearRegression::predict(matrix X){
-    return matmul(X,weights) + bias;
+matrix LogisticRegression::predict(matrix X){
+    matrix Y_pred = sigmoid(matmul(X,weights) + bias);
+    uint64_t n = Y_pred.shape().first;
+    for (uint64_t i = 0 ; i < n ; i++){
+        if (Y_pred(i,0) >= 0.5) Y_pred(i,0) = 1;
+        else Y_pred(i,0) = 0;
+    }
+    return Y_pred;
 }  
 
-void LinearRegression::GD(matrix X, matrix Y,double learning_rate, uint64_t limit){
+void LogisticRegression::GD(matrix X, matrix Y,double learning_rate, uint64_t limit){
     eta = learning_rate;
-    double old_loss = 0,loss = l2loss(X,Y);
+    double old_loss = 0,loss = logisticLoss(X,Y);
     train_loss.PB(loss);
     uint64_t iteration = 0;
     max_iterations = limit;
     while (fabs(loss - old_loss) > epsilon && iteration < max_iterations){
         old_loss = loss;
-        auto[dw,db] = l2lossDerivative(X,Y);
+        auto[dw,db] = lossDerivative(X,Y);
         weights = weights - eta*dw;
         bias = bias - eta*db;
-        loss = l2loss(X,Y);
+        loss = logisticLoss(X,Y);
         train_loss.PB(loss);
         iteration++;
     }
 }
 
-void LinearRegression::train(matrix X,matrix Y,double learning_rate, uint64_t limit){
-    matrix Xt = X.transpose();
-    matrix Z = matmul(Xt,X);
-    weights_ = matmul((Z.inverse()),matmul(Xt,Y));
+void LogisticRegression::train(matrix X,matrix Y,double learning_rate, uint64_t limit){
     GD(X,Y,learning_rate,limit);
     cout << "Training Loss\n";
     for (uint64_t i = 0; i < train_loss.size() ; i++){
@@ -70,23 +78,20 @@ void LinearRegression::train(matrix X,matrix Y,double learning_rate, uint64_t li
     }
 }
 
-void LinearRegression::test(matrix X,matrix Y){
+void LogisticRegression::test(matrix X,matrix Y){
     matrix Y_pred = predict(X);
     uint64_t n = X.shape().first;
-    matrix Y_closed = matmul(X,weights_);
-    cout << "Predictions(GD) \t Predictions(C) \t True Value\n"; 
+    cout << "Predictions(GD) \t True Value\n"; 
     for (uint64_t i = 0 ; i < n ; i++){
-        cout << Y_pred(i,0) << "\t\t\t "<< Y_closed(i,0) << "\t\t\t " << Y(i,0) << "\n";
+        cout << Y_pred(i,0) <<  "\t\t\t " << Y(i,0) << "\n";
     }
-    cout << "Testing loss " << l2loss(X,Y) << "\n";
-
+    cout << "Testing loss " << logisticLoss(X,Y) << "\n";
 }
 
 pair<pair<matrix, matrix>, pair<matrix, matrix>> test_train_split(matrix X, matrix Y, float ratio) {
     if (ratio < 0 || ratio > 1) {
         throw std::invalid_argument("Ratio must be between 0 and 1");
     }
-
     uint64_t n = X.shape().first;
     uint64_t train_size = static_cast<uint64_t>(n * ratio);
     uint64_t test_size = n - train_size;

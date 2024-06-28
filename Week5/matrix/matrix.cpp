@@ -7,7 +7,9 @@ matrix::matrix(uint64_t rowNum, uint64_t colNum){
 }
 
 matrix::matrix(uint64_t size){
-    matrix(size,1);
+    data = vector<double>(size);
+    rows = size;
+    cols = 1;
 }
 
 matrix::matrix(){
@@ -151,9 +153,8 @@ matrix operator-(const matrix& first, const matrix& second){
 
 matrix operator*(const matrix& first, const matrix& second){
     if (first.rows!=second.rows && first.cols!=second.cols){
-        cout << "*" << endl;
         throw std::invalid_argument("Cannot multiply(elementwise) ( "+ to_string(first.rows) +" , " + to_string(first.cols) + " ) with ( " + to_string(second.rows) + " , " + to_string(second.cols) + " )" );
-        }
+    }
     else if (first.rows == second.rows && first.cols == second.cols) {
         matrix prod(first.rows,first.cols);
         for( uint64_t i=0;i<first.rows*first.cols;i++){
@@ -279,12 +280,36 @@ matrix operator*(const matrix& first, const double t) {
     return prod;
 }
 
+matrix operator+(const double t, const matrix& first){
+    matrix sum(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        sum.data[i] = t + first.data[i];
+    }
+    return sum;  
+}
+
+matrix operator-(const double t, const matrix& first){
+    matrix diff(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        diff.data[i] = t - first.data[i];
+    }
+    return diff;  
+}
+
 matrix operator*(const double t, const matrix& first){
     matrix prod(first.rows, first.cols);
     for (uint64_t i=0; i<first.rows*first.cols; i++) {
         prod.data[i] = first.data[i]*t;
     }
     return prod;  
+}
+
+matrix operator/(const double t, const matrix& first){
+    matrix quotient(first.rows, first.cols);
+    for (uint64_t i=0; i<first.rows*first.cols; i++) {
+        quotient.data[i] = first.data[i]*t/first.data[i];
+    }
+    return quotient;  
 }
 
 matrix operator+(const matrix& first, const double t) {
@@ -353,6 +378,15 @@ matrix& operator*=(matrix& self,const matrix& other){
     return self;
 }
 
+matrix operator-(const matrix& M){
+    matrix negation(M.rows,M.cols);
+    for (uint64_t i = 0 ; i < M.rows ; i++){
+        for (uint64_t j = 0 ; j < M.cols ; j++){
+            negation(i,j) = -M(i,j);
+        }
+    }
+    return negation;
+}
 matrix matmul(const matrix& first, const matrix& second){
     __size dim1 = first.shape();
     __size dim2 = second.shape();
@@ -877,6 +911,14 @@ matrix log(matrix &a, double logbase) {
     matrix res(a.rows,a.cols);
     for (uint64_t i=0;i<a.rows*a.cols;i++){
         res.data[i]=std::log(a.data[i])/std::log(logbase);
+    }
+    return res;
+}
+
+matrix log(matrix &a) {
+    matrix res(a.rows,a.cols);
+    for (uint64_t i=0;i<a.rows*a.cols;i++){
+        res.data[i]=std::log(a.data[i]);
     }
     return res;
 }

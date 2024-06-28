@@ -88,17 +88,24 @@ class matrix{
         friend matrix operator-(const matrix& first, const double t); // float subtraction operator : A[i][j] = first[i][j]-t                                
 
         friend matrix operator*(const matrix& first, const double t); // float multiplication operator : A[i][j] = first[i][j]*t                         
+
+        friend matrix operator/(const matrix& first, const double t); // float division operator : A[i][j] = first[i][j]/t                               
+        
+        friend matrix operator+(const double t, const matrix& first); // float addition operator : A[i][j] = first[i][j] + t
+       
+        friend matrix operator-(const double t, const matrix& first); // float subtraction operator : A[i][j] = t - first[i][j]
        
         friend matrix operator*(const double t, const matrix& first); // float multiplication operator : A[i][j] = first[i][j]*t
        
-        friend matrix operator/(const matrix& first, const double t); // float division operator : A[i][j] = first[i][j]/t                               
-
+        friend matrix operator/(const double t, const matrix& first); // float division operator : A[i][j] = t/first[i][j]
+       
         friend matrix& operator+=(matrix& self, const matrix& other); // adds other elementwise to self and stores it in self
 
         friend matrix& operator-=(matrix& self, const matrix& other); // subtracts other elementwise from self and stores it in self
 
         friend matrix& operator*=(matrix& self, const matrix& other); // multiplies other elementwise with self and stores it in self
 
+        friend matrix operator-(const matrix& M); // Negates the entire matrix
 //==MATRIX OPERATIONS=================================================================================================================================
         matrix transpose(); // transpose function : A[i][j] = a[j][i]
 
@@ -157,9 +164,11 @@ matrix tanh(matrix &a); // elementwise tanh function : matr[i][j] = tanh(matr[i]
 
 matrix fabs(matrix &a); // elementwise fabs function : matr[i][j] = fabs(matr[i][j])
 
-matrix exp(matrix &a); // elementwise exponentiator : matr[i][j] = fabs(matr[i][j])
+matrix exp(matrix &a); // elementwise exponentiator : matr[i][j] = exp(matr[i][j])
 
 matrix log(matrix &a,double logbase); // elementwise log operator : matr[i][j] = log_{logbase}(matr[i][j])
+
+matrix log(matrix &a); // elementwise log with logbase e
 
 matrix sqrt(matrix &a); // elementwise sqrt function : matr[i][j] = sqrt(matr[i][j]) 
 

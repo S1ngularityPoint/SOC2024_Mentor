@@ -1,16 +1,16 @@
-#ifndef LINEAR
-#define LINEAR
+#ifndef LOGISTIC
+#define LOGISTIC
 #include "../matrix/matrix.h"
 #include <random>
 #include <algorithm>
 #define EPS 1e-15
 #define ETA 0.001
 
-class LinearRegression{
+class LogisticRegression{
+
     private:
         uint64_t d; // The dimensions of the data. Each datapoint is a dx1 vector
         matrix weights; // The weights are a dx1 vector
-        matrix weights_;
         double bias;
         double epsilon; 
         double eta;
@@ -23,12 +23,13 @@ class LinearRegression{
             * Input is a matrix of dimensions n x d where each row of the matrix is a data point and there are n 
             * datapoints each of dimensions d x 1.
             * The true output values is another matrix of dimensions n x 1 
-            * Predictions are done as y_pred = x.T o w 
-            * For the entire dataset X, Y_pred = Xw
+            * Predictions are done as y_pred = sigmoid(x.T o w + b) 
+            * For the entire dataset X, Y_pred = sigmoid(Xw + b)
         */
-        LinearRegression(uint64_t);
-        double l2loss(matrix, matrix); // Finds the loss given the weights vector, the input data set and the true output values
-        pair<matrix,double> l2lossDerivative(matrix, matrix);
+        LogisticRegression(uint64_t);
+        matrix sigmoid(matrix);
+        double logisticLoss(matrix, matrix); // Finds the loss given the weights vector, the input data set and the true output values
+        pair<matrix,double> lossDerivative(matrix, matrix);
         void GD(matrix, matrix, double, uint64_t);
         void train(matrix, matrix, double, uint64_t);
         void test(matrix, matrix);

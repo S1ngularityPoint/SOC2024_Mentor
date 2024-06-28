@@ -1,24 +1,6 @@
-#include <iostream>
-#include <vector>
-#include "matrix/matrix.h" // Include your matrix header file
 #include "linear.h"
 
 using namespace std;
-
-// Function to generate random data for testing
-pair<matrix, matrix> generate_data(uint64_t n, uint64_t d) {
-    matrix X(n, d);
-    matrix Y(n, 1);
-
-    for (uint64_t i = 0; i < n; i++) {
-        for (uint64_t j = 0; j < d; j++) {
-            X(i, j) = 100 * static_cast<double>(rand()) / RAND_MAX;
-        }
-        Y(i, 0) = 100 * static_cast<double>(rand()) / RAND_MAX;
-    }
-
-    return make_pair(X, Y);
-}
 
 // Function to generate a linearly fittable dataset
 pair<matrix, matrix> generate_linear_data(uint64_t n, uint64_t d) {
@@ -46,31 +28,6 @@ pair<matrix, matrix> generate_linear_data(uint64_t n, uint64_t d) {
     return make_pair(X, Y);
 }
 
-// Function to normalize data
-void normalize(matrix &X) {
-    uint64_t n = X.shape().first;
-    uint64_t d = X.shape().second;
-
-    for (uint64_t j = 0; j < d; j++) {
-        double mean = 0.0;
-        for (uint64_t i = 0; i < n; i++) {
-            mean += X(i, j);
-        }
-        mean /= n;
-
-        double variance = 0.0;
-        for (uint64_t i = 0; i < n; i++) {
-            variance += (X(i, j) - mean) * (X(i, j) - mean);
-        }
-        variance /= n;
-        double stddev = sqrt(variance);
-
-        for (uint64_t i = 0; i < n; i++) {
-            X(i, j) = (X(i, j) - mean) / stddev;
-        }
-    }
-}
-
 int main() {
     // Seed for random number generation
     srand(time(0));
@@ -92,7 +49,7 @@ int main() {
 
     // Create and train the linear regression model
     LinearRegression lr(d);
-    double learning_rate = 0.00001;
+    double learning_rate = 0.0001;
     uint64_t limit = 10000;
     lr.train(X_train, Y_train, learning_rate, limit);
 
