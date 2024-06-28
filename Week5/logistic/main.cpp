@@ -50,8 +50,8 @@ int main() {
     matrix Y_test = split_data.second.second;
     // Create and train the linear regression model
     LogisticRegression lg(d);
-    double learning_rate = 0.000000001;
-    uint64_t limit = 100000;
+    double learning_rate = 0.0001;
+    uint64_t limit = 10000;
     lg.train(X_train, Y_train, learning_rate, limit);
     // Test the model
     lg.test(X_test, Y_test);

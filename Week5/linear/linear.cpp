@@ -32,9 +32,8 @@ pair<matrix, double> LinearRegression::l2lossDerivative(matrix X, matrix Y){
     }
     uint64_t n = X.shape().first;
     matrix Xt = X.transpose();
-    matrix Z = matmul(Xt,X);
-    matrix dw = (2/n)*(matmul(Z,weights) - matmul(Xt,Y)); 
-    double db = (2/n)*dot(ones(1,n),Y_pred - Y); 
+    matrix dw = 2*(matmul(Xt,Y_pred - Y))/n;
+    double db = 2*(dot(ones(1,n),Y_pred - Y))/n; 
     return {dw,db};
 }
 
@@ -62,10 +61,10 @@ void LinearRegression::GD(matrix X, matrix Y,double learning_rate, uint64_t limi
 void LinearRegression::train(matrix X,matrix Y,double learning_rate, uint64_t limit){
     matrix Xt = X.transpose();
     matrix Z = matmul(Xt,X);
-    weights_ = matmul((Z.inverse()),matmul(Xt,Y));
     GD(X,Y,learning_rate,limit);
+    weights_ = matmul((Z.inverse()),matmul(Xt,Y));
     cout << "Training Loss\n";
-    for (uint64_t i = 0; i < train_loss.size() ; i++){
+    for (uint64_t i = 0; i < train_loss.size() ; i+= train_loss.size()/100){
         cout << train_loss[i] << "\n";
     }
 }
@@ -79,7 +78,15 @@ void LinearRegression::test(matrix X,matrix Y){
         cout << Y_pred(i,0) << "\t\t\t "<< Y_closed(i,0) << "\t\t\t " << Y(i,0) << "\n";
     }
     cout << "Testing loss " << l2loss(X,Y) << "\n";
+    cout << "Testing accuracy " << accuracy(Y_pred,Y) << "\n";
+}
 
+double LinearRegression::accuracy(matrix Y_pred, matrix Y){
+    double acc = 0;
+    uint64_t n = Y.shape().first;
+    matrix diff = (Y_pred - Y)/Y;
+    acc = dot(ones(1,n),1 - fabs(diff))/n;
+    return acc;
 }
 
 pair<pair<matrix, matrix>, pair<matrix, matrix>> test_train_split(matrix X, matrix Y, float ratio) {

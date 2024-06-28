@@ -34,6 +34,7 @@ class LogisticRegression{
         void train(matrix, matrix, double, uint64_t);
         void test(matrix, matrix);
         matrix predict(matrix);
+        double accuracy(matrix,matrix);
 };
 
 pair<pair<matrix, matrix>, pair<matrix, matrix>> test_train_split(matrix X, matrix Y, float ratio); // To split the input dataset into train and test
