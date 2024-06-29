@@ -103,7 +103,7 @@ void cdcl::initialise() {
         }
     }
     originalLiteralFreq = literalFreq;
-    cout<<"Initialisation over, input taken, starting solver!\n";
+    // cout<<"Initialisation over, input taken, starting solver!\n";
 
 }
 
@@ -347,7 +347,7 @@ vector<int>& cdcl::resolve(vector<int>& clause, int resolutionLiteral) {
 
 void cdcl::showResult(int res) {
     if (res == RetVal::r_satisfied) {
-        cout<<"SAT"<<endl;
+        cout<<"SAT"<<" | ";
         for (int i=0; i<literals.size(); i++) {
             if (literals[i] != -1) {
                 if (literals[i] > 0) {
