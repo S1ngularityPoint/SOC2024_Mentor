@@ -40,7 +40,7 @@ matrix LinearRegression::predict(matrix X){
     return Y_pred;
 }  
 
-void LinearRegression::GD(matrix X, matrix Y,double learning_rate = ETA , uint64_t limit){
+void LinearRegression::GD(matrix X, matrix Y,double learning_rate , uint64_t limit){
     eta = learning_rate;
     double old_loss = 0,loss = l2loss(X,Y);
     train_loss.PB(loss);

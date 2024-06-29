@@ -53,6 +53,7 @@ void LinearRegression::GD(matrix X, matrix Y,double learning_rate, uint64_t limi
         weights = weights - eta*dw;
         bias = bias - eta*db;
         loss = l2loss(X,Y);
+        if(iteration%1000==0)
         train_loss.PB(loss);
         iteration++;
     }
@@ -64,9 +65,14 @@ void LinearRegression::train(matrix X,matrix Y,double learning_rate, uint64_t li
     GD(X,Y,learning_rate,limit);
     weights_ = matmul((Z.inverse()),matmul(Xt,Y));
     cout << "Training Loss\n";
-    for (uint64_t i = 0; i < train_loss.size() ; i+= train_loss.size()/100){
+    for (uint64_t i = 0; i < train_loss.size() ; i++){
         cout << train_loss[i] << "\n";
     }
+    vector<double> x(train_loss.size());
+    for (uint64_t i = 0; i < train_loss.size() ; i += train_loss.size()){
+        x[i]=(i+1)*1000;
+    }
+    plt::plot(x,train_loss);
 }
 
 void LinearRegression::test(matrix X,matrix Y){

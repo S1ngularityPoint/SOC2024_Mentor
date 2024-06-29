@@ -508,7 +508,7 @@ double matrix::determinant(){
         // Find the pivot
         uint64_t pivot = i;
         for (uint64_t j = i + 1; j < n; ++j) {
-            if (abs(a.data[j * n + i]) > abs(a.data[pivot * n + i])) {
+            if (std::abs(a.data[j * n + i]) > std::abs(a.data[pivot * n + i])) {
                 pivot = j;
             }
         }

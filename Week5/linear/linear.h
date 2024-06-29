@@ -1,6 +1,8 @@
 #ifndef LINEAR // This is a header guard. This makes sure that you do not get an error if linear.h is included multiple times
 #define LINEAR
 #include "../matrix/matrix.h" // This imports the file which has all the definitions regarding matrices. 
+#include "../matplotlibcpp.h"
+namespace plt = matplotlibcpp;
 #include <random> 
 #include <algorithm>
 #define EPS 1e-15 // Some constants. This is a threshold value
