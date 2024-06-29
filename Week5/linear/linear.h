@@ -1,11 +1,13 @@
-#ifndef LINEAR
+#ifndef LINEAR // This is a header guard. This makes sure that you do not get an error if linear.h is included multiple times
 #define LINEAR
-#include "../matrix/matrix.h"
-#include <random>
+#include "../matrix/matrix.h" // This imports the file which has all the definitions regarding matrices. 
+#include <random> 
 #include <algorithm>
-#define EPS 1e-15
-#define ETA 0.001
-
+#define EPS 1e-15 // Some constants. This is a threshold value
+#define ETA 0.001 // This is the default learning rate
+/*
+    * Linear Regression
+*/
 class LinearRegression{
     private:
         uint64_t d; // The dimensions of the data. Each datapoint is a dx1 vector
